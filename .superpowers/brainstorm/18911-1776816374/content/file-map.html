@@ -1,0 +1,77 @@
+<h2>Section 3: Files to Create & Change</h2>
+<p class="subtitle">Every file touched — new in green, modified in amber</p>
+
+<div class="section">
+  <h3>New files</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+
+    <div style="padding:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;font-size:12px">
+      <div style="font-weight:700;color:#16a34a;margin-bottom:4px">+ src/app/api/tools/web/route.ts</div>
+      <div style="color:#374151">Receives <code>{message, locale, history}</code>. Calls Gemini with Grounding tool enabled. Returns <code>{text, sources[]}</code>.</div>
+    </div>
+
+    <div style="padding:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;font-size:12px">
+      <div style="font-weight:700;color:#16a34a;margin-bottom:4px">+ src/app/api/tools/youtube/route.ts</div>
+      <div style="color:#374151">Receives <code>{message, locale}</code>. Extracts or searches YouTube ID → fetches transcript via YouTube Data API → Gemini summarises. Returns <code>{text, video: {title, channel, duration, thumbnailUrl, videoId}}</code>.</div>
+    </div>
+
+    <div style="padding:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;font-size:12px">
+      <div style="font-weight:700;color:#16a34a;margin-bottom:4px">+ src/app/api/tools/image/route.ts</div>
+      <div style="color:#374151">Receives <code>{prompt, locale}</code>. Translates prompt to English if needed → calls Imagen 3 via Vertex AI → returns <code>{imageBase64, mimeType}</code>.</div>
+    </div>
+
+    <div style="padding:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;font-size:12px">
+      <div style="font-weight:700;color:#16a34a;margin-bottom:4px">+ src/app/api/tools/transcribe/route.ts</div>
+      <div style="color:#374151">Receives <code>multipart/form-data</code> with audio blob. Encodes to base64 → sends to Gemini as audio part → returns <code>{text}</code>.</div>
+    </div>
+
+    <div style="padding:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;font-size:12px">
+      <div style="font-weight:700;color:#16a34a;margin-bottom:4px">+ src/lib/intent.ts</div>
+      <div style="color:#374151"><code>detectIntent(message: string): "web" | "youtube" | "image" | "chat"</code>. Pure function, regex + keyword patterns for FR/MG/EN.</div>
+    </div>
+
+    <div style="padding:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;font-size:12px">
+      <div style="font-weight:700;color:#16a34a;margin-bottom:4px">+ src/lib/gemini.ts</div>
+      <div style="color:#374151">Shared Gemini fetch helper. <code>callGemini({systemPrompt, contents, tools?, config?})</code> — eliminates the duplicated raw fetch across all route handlers.</div>
+    </div>
+
+    <div style="padding:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;font-size:12px">
+      <div style="font-weight:700;color:#16a34a;margin-bottom:4px">+ src/hooks/useVoiceRecorder.ts</div>
+      <div style="color:#374151">React hook. Manages <code>MediaRecorder</code> lifecycle — idle → recording → transcribing → done. Returns <code>{state, start, stop, transcript}</code>.</div>
+    </div>
+
+    <div style="padding:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;font-size:12px">
+      <div style="font-weight:700;color:#16a34a;margin-bottom:4px">+ src/types/message.ts</div>
+      <div style="color:#374151">Extended <code>Message</code> type. Adds <code>sources?</code>, <code>image?</code>, <code>video?</code>, <code>file?</code> fields to the existing interface.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>Modified files</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+
+    <div style="padding:12px;background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;font-size:12px">
+      <div style="font-weight:700;color:#b45309;margin-bottom:4px">~ src/app/api/chat/route.ts</div>
+      <div style="color:#374151">Add multimodal support: accept optional <code>file: {base64, mimeType}</code> in payload. Pass as an inline data part alongside the user text. Extract shared Gemini fetch into <code>gemini.ts</code>.</div>
+    </div>
+
+    <div style="padding:12px;background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;font-size:12px">
+      <div style="font-weight:700;color:#b45309;margin-bottom:4px">~ src/app/chat/page.tsx</div>
+      <div style="color:#374151">Wire <code>detectIntent()</code> before sending. Integrate <code>useVoiceRecorder</code> hook on mic button. Add file picker on paperclip button with base64 encoding. Route requests to correct API. Render rich message types.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>Environment variables needed</h3>
+  <div style="padding:14px;background:var(--surface-raised,#f8f8f8);border-radius:8px;font-size:12px;font-family:monospace;line-height:2">
+    <div><span style="color:#16a34a">VERTEX_API_KEY</span> <span style="color:#888"># already exists — used by all Gemini calls</span></div>
+    <div><span style="color:#f59e0b">YOUTUBE_API_KEY</span> <span style="color:#888"># new — YouTube Data API v3 key (free tier covers this)</span></div>
+  </div>
+  <div style="margin-top:8px;font-size:12px;color:#64748b">That's it. Imagen 3 uses the same Vertex endpoint as Gemini — no new key needed.</div>
+</div>
+
+<p style="text-align:center;color:#888;font-size:13px;margin-top:24px">Look good? Reply in terminal to see Section 4 (error handling &amp; edge cases).</p>

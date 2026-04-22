@@ -1,0 +1,71 @@
+<h2>3 Approaches for fy's Tool Architecture</h2>
+<p class="subtitle">How the backend orchestrates web search, YouTube, image gen, voice, and file analysis</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Vercel AI SDK + Gemini <span style="font-size:11px;background:#f0fdf4;color:#16a34a;padding:2px 8px;border-radius:9999px;margin-left:6px;font-weight:600">Recommended</span></h3>
+      <p>Migrate the API route to use <code>@ai-sdk/google</code> + <code>streamText</code> with typed tool definitions. Each tool (<code>webSearch</code>, <code>youtubeAnalysis</code>, <code>generateImage</code>, <code>analyzeFile</code>) is declared once — Gemini decides when to call them. The SDK handles streaming, tool invocation state, and multimodal payloads automatically.</p>
+      <div style="margin-top:12px;padding:10px 12px;background:var(--surface-raised,#f8f8f8);border-radius:8px;font-size:12px;line-height:1.8">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:9999px">Browser</span>
+          <span style="color:#888">→ stream chat →</span>
+          <span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:9999px">/api/chat (streamText)</span>
+          <span style="color:#888">→ toolCall →</span>
+          <span style="background:#fef9c3;color:#854d0e;padding:2px 8px;border-radius:9999px">execute(tool)</span>
+          <span style="color:#888">→ result →</span>
+          <span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:9999px">Gemini synthesizes</span>
+          <span style="color:#888">→ stream to UI</span>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Pros</h4><ul><li>Streaming first-class via <code>useChat</code></li><li>Tool invocation state built-in (show badge automatically)</li><li>Multimodal files &amp; audio handled natively</li><li>Easiest to add new tools later</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Adds <code>@ai-sdk/google</code> dependency</li><li>Requires refactoring existing <code>/api/chat</code> route</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Raw Gemini Function Calling</h3>
+      <p>Keep the existing raw <code>fetch</code> to Vertex AI, but add Gemini's native <code>tools</code> / <code>functionDeclarations</code> to the request body. The API route runs an orchestration loop: call Gemini → handle <code>functionCall</code> → execute → feed result back → repeat until final text response.</p>
+      <div style="margin-top:12px;padding:10px 12px;background:var(--surface-raised,#f8f8f8);border-radius:8px;font-size:12px;line-height:1.8">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:9999px">Browser</span>
+          <span style="color:#888">→ POST →</span>
+          <span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:9999px">/api/chat</span>
+          <span style="color:#888">→ loop until text →</span>
+          <span style="background:#fef9c3;color:#854d0e;padding:2px 8px;border-radius:9999px">Vertex AI raw fetch</span>
+          <span style="color:#888">→ JSON response</span>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Pros</h4><ul><li>Zero new dependencies</li><li>Stays 100% Google ecosystem</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>No streaming — full response before UI updates</li><li>Orchestration loop is tricky to get right</li><li>Multimodal / file handling is manual</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Intent Routing (Separate API Routes)</h3>
+      <p>Keep the main Gemini chat route. Add dedicated routes per tool (<code>/api/tools/web</code>, <code>/api/tools/youtube</code>, <code>/api/tools/image</code>). The frontend pre-classifies intent (regex + keyword matching on the message) and calls the right route, showing the tool badge before the request completes.</p>
+      <div style="margin-top:12px;padding:10px 12px;background:var(--surface-raised,#f8f8f8);border-radius:8px;font-size:12px;line-height:1.8">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:9999px">Browser classifies intent</span>
+          <span style="color:#888">→</span>
+          <span style="background:#fef9c3;color:#854d0e;padding:2px 8px;border-radius:9999px">/api/tools/[tool]</span>
+          <span style="color:#888">or</span>
+          <span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:9999px">/api/chat</span>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Pros</h4><ul><li>Very simple to reason about</li><li>Easy to debug each tool in isolation</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Client-side intent detection is fragile</li><li>Multi-tool requests (search + image) don't compose</li><li>No streaming on main chat</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>

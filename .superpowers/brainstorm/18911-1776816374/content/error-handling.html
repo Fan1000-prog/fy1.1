@@ -1,0 +1,59 @@
+<h2>Section 4: Error Handling & Edge Cases</h2>
+<p class="subtitle">What can go wrong per tool, and how fy recovers gracefully</p>
+
+<div class="section">
+  <h3>Per-tool failure modes</h3>
+  <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+
+    <div style="display:grid;grid-template-columns:160px 1fr 1fr;gap:0;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden">
+      <div style="padding:8px 12px;background:#f8fafc;font-weight:700;color:#475569;border-right:1px solid #e2e8f0">Tool</div>
+      <div style="padding:8px 12px;background:#f8fafc;font-weight:700;color:#dc2626;border-right:1px solid #e2e8f0">Failure</div>
+      <div style="padding:8px 12px;background:#f8fafc;font-weight:700;color:#16a34a">Recovery</div>
+
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;border-right:1px solid #e2e8f0;font-weight:600;color:#d97706">🌐 Web</div>
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;border-right:1px solid #e2e8f0;color:#64748b">Grounding returns no results or Gemini quota exceeded</div>
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;color:#64748b">Fall back to plain Gemini answer (no sources). Show "Sources unavailable" label.</div>
+
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;border-right:1px solid #e2e8f0;font-weight:600;color:#ec4899">▶ YouTube</div>
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;border-right:1px solid #e2e8f0;color:#64748b">Video has no captions / transcript disabled / private video / API quota</div>
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;color:#64748b">Return user-facing message: "Cette vidéo n'a pas de sous-titres disponibles." For API quota, show retry prompt.</div>
+
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;border-right:1px solid #e2e8f0;font-weight:600;color:#7c3aed">🖼 Image</div>
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;border-right:1px solid #e2e8f0;color:#64748b">Imagen rejects prompt (safety filter) or Vertex quota exceeded</div>
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;color:#64748b">Surface safety message in fy's voice: "Je ne peux pas générer cette image." Never expose raw API error.</div>
+
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;border-right:1px solid #e2e8f0;font-weight:600;color:#dc2626">🎤 Voice</div>
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;border-right:1px solid #e2e8f0;color:#64748b">Microphone permission denied / empty audio / transcription fails</div>
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;color:#64748b">Show inline prompt: "Accès au micro refusé." On empty audio, silently reset. On transcription failure, show toast.</div>
+
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;border-right:1px solid #e2e8f0;font-weight:600;color:#0891b2">📎 File</div>
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;border-right:1px solid #e2e8f0;color:#64748b">File too large (Gemini inline limit ~20 MB) / unsupported type</div>
+      <div style="padding:8px 12px;border-top:1px solid #e2e8f0;color:#64748b">Validate client-side before upload. Reject with "Fichier trop volumineux (max 20 MB)" or "Format non supporté (PDF, JPEG, PNG)."</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>Global patterns</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px">
+    <div style="padding:12px;background:var(--surface-raised,#f8f8f8);border-radius:8px">
+      <div style="font-weight:600;margin-bottom:6px">API errors never reach the UI raw</div>
+      <div style="color:#64748b">All route handlers wrap responses in try/catch. Error messages are always translated into FR/MG/EN by locale. Status codes are normalized to 200 with an <code>error</code> field so the frontend has one code path.</div>
+    </div>
+    <div style="padding:12px;background:var(--surface-raised,#f8f8f8);border-radius:8px">
+      <div style="font-weight:600;margin-bottom:6px">No double-loading states</div>
+      <div style="color:#64748b">The existing <code>isTyping</code> flag covers all tool requests. The tool badge ("Web Search · Searching…") replaces the generic typing dots while a tool is active — one consistent loading pattern.</div>
+    </div>
+    <div style="padding:12px;background:var(--surface-raised,#f8f8f8);border-radius:8px">
+      <div style="font-weight:600;margin-bottom:6px">Intent misfire escape hatch</div>
+      <div style="color:#64748b">If <code>detectIntent()</code> fires the wrong tool, the response will be obviously wrong. The tool pill stays togglable — user can manually force the correct tool and resend.</div>
+    </div>
+    <div style="padding:12px;background:var(--surface-raised,#f8f8f8);border-radius:8px">
+      <div style="font-weight:600;margin-bottom:6px">YouTube transcript fallback</div>
+      <div style="color:#64748b">If captions aren't available, fy analyses the video title + description + metadata only — still returns useful context rather than a hard failure.</div>
+    </div>
+  </div>
+</div>
+
+<p style="text-align:center;color:#888;font-size:13px;margin-top:24px">That's the full design. Reply in terminal to confirm approval and move to the written spec.</p>

@@ -1,0 +1,66 @@
+<h2>fy Tool Architecture — Design</h2>
+<p class="subtitle">Section 1 of 4: System overview & data flow</p>
+
+<div class="section">
+  <h3>Request flow</h3>
+  <div style="padding:20px;background:var(--surface-raised,#f8f8f8);border-radius:12px;font-size:13px;line-height:2.2">
+
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <span style="background:#1d4ed8;color:#fff;padding:4px 12px;border-radius:8px;font-weight:600">User message / audio / file</span>
+      <span style="color:#888;font-size:16px">→</span>
+      <span style="background:#f1f5f9;border:1px solid #e2e8f0;padding:4px 12px;border-radius:8px;font-weight:500">detectIntent()</span>
+      <span style="color:#888;font-size:16px">→</span>
+      <span style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:8px;font-weight:600">Show tool badge</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+      <div style="padding:12px;background:#fff;border:1px solid #e2e8f0;border-radius:8px">
+        <div style="font-weight:600;margin-bottom:8px;color:#1d4ed8">🔵 /api/chat</div>
+        <div style="color:#64748b;font-size:12px">Plain conversation — no tool intent detected. Passes full history to Gemini 2.5 Flash, returns text.</div>
+      </div>
+      <div style="padding:12px;background:#fff;border:1px solid #e2e8f0;border-radius:8px">
+        <div style="font-weight:600;margin-bottom:8px;color:#d97706">🟡 /api/tools/web</div>
+        <div style="color:#64748b;font-size:12px">Gemini with Grounding enabled. Returns answer text + array of sources [{title, url, snippet}].</div>
+      </div>
+      <div style="padding:12px;background:#fff;border:1px solid #e2e8f0;border-radius:8px">
+        <div style="font-weight:600;margin-bottom:8px;color:#16a34a">🟢 /api/tools/youtube</div>
+        <div style="color:#64748b;font-size:12px">YouTube Data API (search or extract ID from URL) → fetch transcript → Gemini summarises. Returns summary + video metadata.</div>
+      </div>
+      <div style="padding:12px;background:#fff;border:1px solid #e2e8f0;border-radius:8px">
+        <div style="font-weight:600;margin-bottom:8px;color:#9333ea">🟣 /api/tools/image</div>
+        <div style="color:#64748b;font-size:12px">Imagen 3 via Vertex AI. Translates user prompt → generates image → returns base64. Rendered inline in chat.</div>
+      </div>
+      <div style="padding:12px;background:#fff;border:1px solid #e2e8f0;border-radius:8px">
+        <div style="font-weight:600;margin-bottom:8px;color:#dc2626">🔴 /api/tools/transcribe</div>
+        <div style="color:#64748b;font-size:12px">Receives audio blob → sends to Gemini as multimodal input → returns transcribed text. Result is injected back into the chat input.</div>
+      </div>
+      <div style="padding:12px;background:#fff;border:1px solid #e2e8f0;border-radius:8px">
+        <div style="font-weight:600;margin-bottom:8px;color:#0891b2">🔵 /api/chat (multimodal)</div>
+        <div style="color:#64748b;font-size:12px">Same /api/chat route, but message payload includes base64 file + mimeType. Gemini reads PDFs, JPEGs, PNGs natively.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Intent detection — client-side, zero latency</h3>
+  <div style="padding:16px;background:var(--surface-raised,#f8f8f8);border-radius:12px;font-size:13px">
+    <p style="margin:0 0 10px">A <code>detectIntent(message)</code> utility runs on the message text before sending. It returns one of: <code>"web"</code> | <code>"youtube"</code> | <code>"image"</code> | <code>"chat"</code>. Voice and file are triggered by UI events (mic button, paperclip), not text patterns.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
+      <div style="background:#fff;border:1px solid #e2e8f0;padding:10px;border-radius:8px">
+        <div style="font-weight:600;color:#d97706;margin-bottom:4px">→ web</div>
+        <div style="color:#64748b;font-size:11px">"recherche…", "search for…", "what is…", "latest news", "actualités", "vaovao"</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;padding:10px;border-radius:8px">
+        <div style="font-weight:600;color:#16a34a;margin-bottom:4px">→ youtube</div>
+        <div style="color:#64748b;font-size:11px">youtube.com/watch, youtu.be/, "resume cette video", "summarise this video", "résume"</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;padding:10px;border-radius:8px">
+        <div style="font-weight:600;color:#9333ea;margin-bottom:4px">→ image</div>
+        <div style="color:#64748b;font-size:11px">"generate image", "génère une image", "crée une image", "draw", "dessine", "sary"</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="text-align:center;color:#888;font-size:13px;margin-top:24px">Does this architecture look right? Reply in terminal to continue to Section 2 (rich message types &amp; UI changes).</p>
