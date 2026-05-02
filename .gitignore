@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +40,30 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local tooling / agent state (not for repo)
+.claude/
+.agents/
+.playwright-mcp/
+skills-lock.json
+docs/superpowers/
+
+# duplicate source assets (canonical copies live in /public)
+/fy_favicon.png
+/fy_nobg.png
+
+# firebase emulator artifacts
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+*-debug.log
+
+# secret patterns (defense in depth)
+*service-account*.json
+*serviceAccount*.json
+*credentials*.json
+*.key
+*.p12
+*.pfx
+*.cer
