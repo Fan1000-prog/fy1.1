@@ -53,6 +53,7 @@ export function UserMenu() {
     setBusy(true);
     try {
       await logOut();
+      setBusy(false);
     } catch (err) {
       console.error(err);
       toast.error(t("auth_error_generic"));

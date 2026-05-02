@@ -38,7 +38,8 @@ export function LangSwitcher({ className }: { className?: string }) {
           <DropdownMenuItem
             key={l.value}
             onSelect={() => setLocale(l.value)}
-            className="gap-2"
+            onClick={() => setLocale(l.value)}
+            className="gap-2 cursor-pointer"
           >
             <span aria-hidden="true">{l.flag}</span>
             <span className="flex-1">{l.full}</span>
