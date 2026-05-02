@@ -55,33 +55,41 @@ export async function syncUserDoc(user: User): Promise<FirebaseUser> {
     ? "anonymous"
     : "google.com";
 
-  if (!existing.exists()) {
-    const payload = {
-      uid: user.uid,
-      displayName: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-      isAnonymous: user.isAnonymous,
-      providerId,
-      createdAt: serverTimestamp(),
-      lastLoginAt: serverTimestamp(),
-    };
-    await setDoc(ref, payload);
-    const written = await getDoc(ref);
-    return written.data() as FirebaseUser;
-  }
-
-  const updates = {
+  const now = Timestamp.now();
+  const baseFields = {
     displayName: user.displayName,
     email: user.email,
     photoURL: user.photoURL,
     isAnonymous: user.isAnonymous,
     providerId,
-    lastLoginAt: serverTimestamp(),
   };
-  await setDoc(ref, updates, { merge: true });
-  const written = await getDoc(ref);
-  return written.data() as FirebaseUser;
+
+  if (!existing.exists()) {
+    await setDoc(ref, {
+      uid: user.uid,
+      ...baseFields,
+      createdAt: serverTimestamp(),
+      lastLoginAt: serverTimestamp(),
+    });
+    return {
+      uid: user.uid,
+      ...baseFields,
+      createdAt: now,
+      lastLoginAt: now,
+    };
+  }
+
+  await setDoc(
+    ref,
+    { ...baseFields, lastLoginAt: serverTimestamp() },
+    { merge: true }
+  );
+  const prior = existing.data() as FirebaseUser;
+  return {
+    ...prior,
+    ...baseFields,
+    lastLoginAt: now,
+  };
 }
 
 export async function getUserData(uid: string): Promise<FirebaseUser | null> {

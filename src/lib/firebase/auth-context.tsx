@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
@@ -84,13 +85,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const clearCollision = useCallback(() => setCollisionPending(null), []);
 
-  return (
-    <AuthContext.Provider
-      value={{ user, firebaseUser, loading, collisionPending, clearCollision }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({ user, firebaseUser, loading, collisionPending, clearCollision }),
+    [user, firebaseUser, loading, collisionPending, clearCollision]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
