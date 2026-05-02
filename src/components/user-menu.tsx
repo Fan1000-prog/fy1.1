@@ -60,7 +60,8 @@ export function UserMenu() {
       console.log("Logout successful, redirecting to login...");
       setOpen(false);
       setBusy(false);
-      router.replace("/login");
+      // Use window.location for full page navigation to clear all state
+      window.location.href = "/login";
     } catch (err) {
       console.error("Logout error:", err);
       toast.error(t("auth_error_generic"));
