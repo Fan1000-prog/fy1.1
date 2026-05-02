@@ -34,6 +34,14 @@ import { useAuth } from "@/lib/firebase/auth-context";
 import { RequireAuth } from "@/components/require-auth";
 import { UserMenu } from "@/components/user-menu";
 import { AuthCollisionDialog } from "@/components/auth-collision-dialog";
+import {
+  createChat,
+  getChatMessages,
+  getUserChats,
+  saveMessage,
+  type Chat,
+  type ChatMessage,
+} from "@/lib/firebase/chat";
 
 interface Conversation {
   id: string;
@@ -41,13 +49,6 @@ interface Conversation {
   preview: string;
   time: string;
 }
-
-const DEMO_CONVERSATIONS: Conversation[] = [
-  { id: "1", title: "Actualités Madagascar", preview: "Les dernières nouvelles de…", time: "10:32" },
-  { id: "2", title: "Résumé vidéo TED", preview: "J'ai analysé la vidéo sur…", time: "Hier" },
-  { id: "3", title: "Image île tropicale", preview: "Voici l'image générée de…", time: "Hier" },
-  { id: "4", title: "Traduction Malgache", preview: "La traduction du texte est…", time: "Lun" },
-];
 
 const DEMO_WELCOME: Message = {
   id: "welcome",
@@ -72,6 +73,82 @@ const AI_TOOLS = [
   { id: "voice", icon: Mic, labelKey: "chat_tool_voice" as const },
 ];
 
+const TITLE_MAX_LEN = 60;
+
+function deriveTitle(seed: string): string {
+  const cleaned = seed.replace(/\s+/g, " ").trim();
+  if (!cleaned) return "Nouvelle discussion";
+  return cleaned.length > TITLE_MAX_LEN ? cleaned.slice(0, TITLE_MAX_LEN - 1) + "…" : cleaned;
+}
+
+function formatChatTime(date: Date): string {
+  const now = new Date();
+  const sameDay =
+    date.getFullYear() === now.getFullYear() &&
+    date.getMonth() === now.getMonth() &&
+    date.getDate() === now.getDate();
+  if (sameDay) {
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  }
+  const diffDays = Math.floor((now.getTime() - date.getTime()) / 86_400_000);
+  if (diffDays === 1) return "Hier";
+  if (diffDays < 7) {
+    return date.toLocaleDateString([], { weekday: "short" });
+  }
+  return date.toLocaleDateString([], { day: "2-digit", month: "short" });
+}
+
+function toConversation(c: Chat): Conversation {
+  const last = c.messages?.[c.messages.length - 1];
+  const updated = c.updatedAt?.toDate?.() ?? new Date();
+  return {
+    id: c.id,
+    title: c.title || "Nouvelle discussion",
+    preview: last?.content ? last.content.slice(0, 60) : "",
+    time: formatChatTime(updated),
+  };
+}
+
+function fromChatMessage(m: ChatMessage): Message {
+  return {
+    id: m.id,
+    role: m.role,
+    content: m.content,
+    tool: m.tool,
+    timestamp: new Date(m.timestamp),
+    sources: m.sources,
+    image: m.image,
+    video: m.video
+      ? {
+          videoId: m.video.videoId,
+          title: m.video.title,
+          channel: m.video.channel,
+          duration: m.video.duration ?? "",
+          thumbnailUrl: m.video.thumbnailUrl ?? "",
+          viewCount: m.video.viewCount,
+        }
+      : undefined,
+    file: m.file,
+    error: m.error,
+  };
+}
+
+function toChatMessage(m: Message): ChatMessage {
+  const out: ChatMessage = {
+    id: m.id,
+    role: m.role,
+    content: m.content,
+    timestamp: m.timestamp.getTime(),
+  };
+  if (m.tool !== undefined) out.tool = m.tool;
+  if (m.sources !== undefined) out.sources = m.sources;
+  if (m.image !== undefined) out.image = m.image;
+  if (m.video !== undefined) out.video = m.video;
+  if (m.file !== undefined) out.file = m.file;
+  if (m.error !== undefined) out.error = m.error;
+  return out;
+}
+
 function ChatInner() {
   const { t, locale } = useI18n();
   const { user, firebaseUser } = useAuth();
@@ -82,7 +159,8 @@ function ChatInner() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [activeToolLabel, setActiveToolLabel] = useState<string | null>(null);
-  const [activeConv, setActiveConv] = useState("1");
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeConv, setActiveConv] = useState<string | null>(null);
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const [attachedFile, setAttachedFile] = useState<(AttachedFile & { base64: string }) | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -92,6 +170,44 @@ function ChatInner() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const voice = useVoiceRecorder();
+
+  useEffect(() => {
+    const uid = user?.uid;
+    if (!uid) {
+      setConversations([]);
+      return;
+    }
+    let cancelled = false;
+    getUserChats(uid)
+      .then((chats) => {
+        if (!cancelled) setConversations(chats.map(toConversation));
+      })
+      .catch((e) => console.error("getUserChats failed:", e));
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.uid]);
+
+  async function handleSelectChat(id: string) {
+    const uid = user?.uid;
+    if (!uid) return;
+    setActiveConv(id);
+    try {
+      const msgs = await getChatMessages(uid, id);
+      setMessages(msgs.length ? msgs.map(fromChatMessage) : [DEMO_WELCOME]);
+    } catch (e) {
+      console.error("getChatMessages failed:", e);
+    }
+  }
+
+  function handleNewChat() {
+    setActiveConv(null);
+    setMessages([DEMO_WELCOME]);
+    setInput("");
+    setAttachedFile(null);
+    setActiveTool(null);
+    setFileError(null);
+  }
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -181,6 +297,31 @@ function ChatInner() {
       timestamp: new Date(),
     };
 
+    const uid = user?.uid;
+    let chatId = activeConv;
+    if (uid && !chatId) {
+      try {
+        chatId = await createChat(uid, deriveTitle(text || attachedFile?.name || "Nouvelle discussion"));
+        setActiveConv(chatId);
+        setConversations((prev) => [
+          {
+            id: chatId!,
+            title: deriveTitle(text || attachedFile?.name || "Nouvelle discussion"),
+            preview: text.slice(0, 60),
+            time: formatChatTime(new Date()),
+          },
+          ...prev,
+        ]);
+      } catch (e) {
+        console.error("createChat failed:", e);
+      }
+    }
+    if (uid && chatId) {
+      saveMessage(uid, chatId, toChatMessage(userMsg)).catch((e) =>
+        console.error("saveMessage(user) failed:", e),
+      );
+    }
+
     const filePayload = attachedFile
       ? { base64: attachedFile.base64, mimeType: attachedFile.mimeType }
       : null;
@@ -269,6 +410,18 @@ function ChatInner() {
       }
 
       setMessages((prev) => [...prev, aiMsg]);
+      if (uid && chatId) {
+        saveMessage(uid, chatId, toChatMessage(aiMsg)).catch((e) =>
+          console.error("saveMessage(ai) failed:", e),
+        );
+        setConversations((prev) =>
+          prev.map((c) =>
+            c.id === chatId
+              ? { ...c, preview: aiMsg.content.slice(0, 60), time: formatChatTime(new Date()) }
+              : c,
+          ),
+        );
+      }
     } catch {
       setMessages((prev) => [
         ...prev,
@@ -302,10 +455,10 @@ function ChatInner() {
       <aside className="hidden w-64 flex-shrink-0 flex-col border-r border-border bg-sidebar md:flex">
         <SidebarContent
           t={t}
-          conversations={DEMO_CONVERSATIONS}
+          conversations={conversations}
           activeConv={activeConv}
-          setActiveConv={setActiveConv}
-          onNewChat={() => { setMessages([DEMO_WELCOME]); setActiveConv(""); }}
+          onSelectChat={handleSelectChat}
+          onNewChat={handleNewChat}
         />
       </aside>
 
@@ -319,10 +472,10 @@ function ChatInner() {
               <SheetContent side="left" className="w-64 p-0">
                 <SidebarContent
                   t={t}
-                  conversations={DEMO_CONVERSATIONS}
+                  conversations={conversations}
                   activeConv={activeConv}
-                  setActiveConv={setActiveConv}
-                  onNewChat={() => setMessages([DEMO_WELCOME])}
+                  onSelectChat={handleSelectChat}
+                  onNewChat={handleNewChat}
                 />
               </SheetContent>
             </Sheet>
@@ -480,12 +633,12 @@ function fallbackError(locale: string): string {
 // ─── sidebar ──────────────────────────────────────────────────────────────────
 
 function SidebarContent({
-  t, conversations, activeConv, setActiveConv, onNewChat,
+  t, conversations, activeConv, onSelectChat, onNewChat,
 }: {
   t: ReturnType<typeof useI18n>["t"];
   conversations: Conversation[];
-  activeConv: string;
-  setActiveConv: (id: string) => void;
+  activeConv: string | null;
+  onSelectChat: (id: string) => void;
   onNewChat: () => void;
 }) {
   return (
@@ -525,7 +678,7 @@ function SidebarContent({
           {conversations.map((conv) => (
             <button
               key={conv.id}
-              onClick={() => setActiveConv(conv.id)}
+              onClick={() => onSelectChat(conv.id)}
               className={cn(
                 "group flex w-full flex-col items-start rounded-xl px-3 py-2.5 text-left transition-all",
                 activeConv === conv.id

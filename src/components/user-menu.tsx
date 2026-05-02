@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ChevronDown, LogOut, Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,7 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -26,7 +24,6 @@ function initials(name: string | null | undefined, fallback: string): string {
 export function UserMenu() {
   const { user, firebaseUser, reportCollision } = useAuth();
   const { t } = useI18n();
-  const router = useRouter();
   const [busy, setBusy] = useState(false);
 
   if (!user) return null;
@@ -56,7 +53,6 @@ export function UserMenu() {
     setBusy(true);
     try {
       await logOut();
-      router.replace("/");
     } catch (err) {
       console.error(err);
       toast.error(t("auth_error_generic"));
@@ -82,14 +78,12 @@ export function UserMenu() {
       <DropdownMenuContent align="end" side="top" className="w-56">
         {!isAnon && firebaseUser?.email && (
           <>
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col">
-                <span className="text-sm font-medium">{displayName}</span>
-                <span className="text-xs text-muted-foreground">
-                  {firebaseUser.email}
-                </span>
-              </div>
-            </DropdownMenuLabel>
+            <div className="flex flex-col px-2 py-1.5">
+              <span className="text-sm font-medium">{displayName}</span>
+              <span className="truncate text-xs text-muted-foreground">
+                {firebaseUser.email}
+              </span>
+            </div>
             <DropdownMenuSeparator />
           </>
         )}

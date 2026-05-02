@@ -10,6 +10,7 @@ import {
   query,
   orderBy,
   limit,
+  arrayUnion,
   Timestamp,
   DocumentData,
 } from "firebase/firestore";
@@ -57,11 +58,11 @@ export async function createChat(userId: string, title: string): Promise<string>
 export async function saveMessage(
   userId: string,
   chatId: string,
-  message: ChatMessage
+  message: ChatMessage,
 ): Promise<void> {
   const chatRef = doc(db, "users", userId, "chats", chatId);
   await updateDoc(chatRef, {
-    messages: [...(await getChatMessages(userId, chatId)), message],
+    messages: arrayUnion(message),
     updatedAt: Timestamp.now(),
   });
 }

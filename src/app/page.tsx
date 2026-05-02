@@ -213,7 +213,10 @@ export function FyLogo({ small }: { small?: boolean }) {
         width={size * 2}
         height={size * 2}
         priority
-        className={cn("dark:brightness-0 dark:invert", small ? "h-14 w-auto" : "h-[4.5rem] w-auto")}
+        className={cn(
+          "w-auto dark:brightness-0 dark:invert",
+          small ? "h-10 sm:h-14" : "h-12 sm:h-14 md:h-[4.5rem]",
+        )}
       />
     </Link>
   );
