@@ -27,6 +27,7 @@ export function UserMenu() {
   const { t } = useI18n();
   const router = useRouter();
   const [busy, setBusy] = useState(false);
+  const [open, setOpen] = useState(false);
 
   if (!user) return null;
 
@@ -57,6 +58,7 @@ export function UserMenu() {
       console.log("Logging out...");
       await logOut();
       console.log("Logout successful, redirecting to login...");
+      setOpen(false);
       setBusy(false);
       router.replace("/login");
     } catch (err) {
@@ -67,7 +69,7 @@ export function UserMenu() {
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         className="flex w-full items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-left transition-colors hover:bg-accent disabled:opacity-60"
         disabled={busy}
