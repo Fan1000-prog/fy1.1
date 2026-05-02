@@ -41,7 +41,12 @@ export function AuthCollisionDialog() {
   }
 
   return (
-    <AlertDialog open={open}>
+    <AlertDialog
+      open={open}
+      onOpenChange={(o) => {
+        if (!o && !busy) clearCollision();
+      }}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t("auth_collision_title")}</AlertDialogTitle>
