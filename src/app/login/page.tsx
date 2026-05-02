@@ -1,34 +1,65 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useI18n } from "@/lib/i18n";
+import { useAuth } from "@/lib/firebase/auth-context";
 import { LangSwitcher } from "@/components/lang-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { signInGuest, signInWithGoogle } from "@/lib/firebase/auth";
 
 export default function LoginPage() {
   const { t } = useI18n();
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { user, loading: authLoading } = useAuth();
+  const [busy, setBusy] = useState<"google" | "guest" | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!name.trim()) return;
-    setLoading(true);
-    localStorage.setItem("fy-user", name.trim());
-    router.push("/chat");
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace("/chat");
+    }
+  }, [authLoading, user, router]);
+
+  async function handleGoogle() {
+    setBusy("google");
+    setError(null);
+    try {
+      await signInWithGoogle();
+    } catch (err) {
+      console.error(err);
+      setError(t("auth_error_generic"));
+      setBusy(null);
+    }
+  }
+
+  async function handleGuest() {
+    setBusy("guest");
+    setError(null);
+    try {
+      await signInGuest();
+      router.push("/chat");
+    } catch (err) {
+      console.error(err);
+      setError(t("auth_error_generic"));
+      setBusy(null);
+    }
+  }
+
+  if (authLoading) {
+    return (
+      <div className="flex min-h-full items-center justify-center fy-hero-gradient">
+        <span className="h-6 w-6 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />
+      </div>
+    );
   }
 
   return (
     <div className="relative flex min-h-full flex-col items-center justify-center fy-hero-gradient px-4">
-      {/* Top bar */}
       <div className="absolute left-0 right-0 top-0 flex items-center justify-between px-6 py-4">
         <Link
           href="/"
@@ -44,7 +75,6 @@ export default function LoginPage() {
       </div>
 
       <div className="w-full max-w-sm">
-        {/* Logo */}
         <div className="mb-8 flex flex-col items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand text-lg font-bold text-brand-foreground shadow-lg">
             fy
@@ -55,43 +85,60 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Card */}
         <div className="rounded-2xl border border-border bg-card p-6 shadow-xl">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="name" className="text-sm">
-                {t("login_name")}
-              </Label>
-              <Input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder={t("login_name_placeholder")}
-                required
-                autoFocus
-                className="rounded-xl"
-              />
+          <div className="space-y-3">
+            <Button
+              type="button"
+              onClick={handleGoogle}
+              disabled={busy !== null}
+              className={cn(
+                "w-full rounded-xl bg-brand text-brand-foreground hover:bg-brand/90",
+                busy === "google" && "opacity-70"
+              )}
+            >
+              {busy === "google" ? (
+                <span className="flex items-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-brand-foreground border-t-transparent" />
+                  {t("login_google")}
+                </span>
+              ) : (
+                t("login_google")
+              )}
+            </Button>
+
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <div className="h-px flex-1 bg-border" />
+              <span>{t("login_or")}</span>
+              <div className="h-px flex-1 bg-border" />
             </div>
 
             <Button
-              type="submit"
-              disabled={!name.trim() || loading}
+              type="button"
+              variant="outline"
+              onClick={handleGuest}
+              disabled={busy !== null}
               className={cn(
-                "w-full rounded-xl bg-brand text-brand-foreground hover:bg-brand/90",
-                loading && "opacity-70"
+                "w-full rounded-xl",
+                busy === "guest" && "opacity-70"
               )}
             >
-              {loading ? (
+              {busy === "guest" ? (
                 <span className="flex items-center gap-2">
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-brand-foreground border-t-transparent" />
-                  {t("login_btn")}
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-foreground border-t-transparent" />
+                  {t("login_guest")}
                 </span>
               ) : (
-                t("login_btn")
+                t("login_guest")
               )}
             </Button>
-          </form>
+
+            {error && (
+              <div className="flex items-start gap-2 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
