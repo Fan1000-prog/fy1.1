@@ -109,7 +109,13 @@ export async function POST(req: NextRequest) {
       .filter(Boolean)
       .join("\n\n");
 
-    const prompt = `${contextBlock}\n\nUser request: ${message}\n\nProvide a structured summary with key points and timestamps if available.`;
+    const summaryInstruction: Record<string, string> = {
+      fr: "Fournis un résumé structuré avec les points clés et les horodatages si disponibles.",
+      mg: "Omeo famintinana voalamina miaraka amin'ny teboka lehibe sy ny fotoana raha misy.",
+      en: "Provide a structured summary with key points and timestamps if available.",
+    };
+    const instruction = summaryInstruction[detectedLang] ?? summaryInstruction.fr;
+    const prompt = `${contextBlock}\n\nUser request: ${message}\n\n${instruction}`;
 
     const { text } = await callGemini({
       systemPrompt,

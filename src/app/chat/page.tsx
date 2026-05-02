@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useI18n } from "@/lib/i18n";
@@ -23,15 +24,17 @@ import {
   Plus,
   MessageSquare,
   Menu,
-  Sparkles,
   StopCircle,
-  ChevronDown,
   Paperclip,
   X,
   Download,
   ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/firebase/auth-context";
+import { RequireAuth } from "@/components/require-auth";
+import { UserMenu } from "@/components/user-menu";
+import { AuthCollisionDialog } from "@/components/auth-collision-dialog";
 
 interface Conversation {
   id: string;
@@ -70,9 +73,12 @@ const AI_TOOLS = [
   { id: "voice", icon: Mic, labelKey: "chat_tool_voice" as const },
 ];
 
-export default function ChatPage() {
+function ChatInner() {
   const { t, locale } = useI18n();
-  const [userName, setUserName] = useState("?");
+  const { user, firebaseUser } = useAuth();
+  const userName = user?.isAnonymous
+    ? t("menu_guest_label")
+    : firebaseUser?.displayName ?? user?.displayName ?? t("menu_guest_label");
   const [messages, setMessages] = useState<Message[]>([DEMO_WELCOME]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -87,11 +93,6 @@ export default function ChatPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const voice = useVoiceRecorder();
-
-  useEffect(() => {
-    const stored = localStorage.getItem("fy-user");
-    if (stored) setUserName(stored);
-  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -302,7 +303,6 @@ export default function ChatPage() {
       <aside className="hidden w-64 flex-shrink-0 flex-col border-r border-border bg-sidebar md:flex">
         <SidebarContent
           t={t}
-          userName={userName}
           conversations={DEMO_CONVERSATIONS}
           activeConv={activeConv}
           setActiveConv={setActiveConv}
@@ -314,15 +314,12 @@ export default function ChatPage() {
         <header className="flex h-14 items-center justify-between border-b border-border px-4">
           <div className="flex items-center gap-2">
             <Sheet>
-              <SheetTrigger>
-                <button className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent md:hidden">
-                  <Menu className="h-4 w-4" />
-                </button>
+              <SheetTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent md:hidden">
+                <Menu className="h-4 w-4" />
               </SheetTrigger>
               <SheetContent side="left" className="w-64 p-0">
                 <SidebarContent
                   t={t}
-                  userName={userName}
                   conversations={DEMO_CONVERSATIONS}
                   activeConv={activeConv}
                   setActiveConv={setActiveConv}
@@ -330,16 +327,6 @@ export default function ChatPage() {
                 />
               </SheetContent>
             </Sheet>
-            <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-brand text-[10px] font-bold text-brand-foreground">
-                fy
-              </div>
-              <span className="text-sm font-medium">fy</span>
-            </div>
-            <Badge variant="secondary" className="hidden gap-1 rounded-full text-xs sm:flex">
-              <Sparkles className="h-3 w-3 text-brand" />
-              Pro
-            </Badge>
           </div>
           <div className="flex items-center gap-2">
             <LangSwitcher />
@@ -347,7 +334,7 @@ export default function ChatPage() {
           </div>
         </header>
 
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 min-h-0">
           <div className="mx-auto max-w-2xl px-4 py-6">
             {isWelcome ? (
               <WelcomeScreen t={t} />
@@ -495,10 +482,9 @@ function fallbackError(locale: string): string {
 // ─── sidebar ──────────────────────────────────────────────────────────────────
 
 function SidebarContent({
-  t, userName, conversations, activeConv, setActiveConv, onNewChat,
+  t, conversations, activeConv, setActiveConv, onNewChat,
 }: {
   t: ReturnType<typeof useI18n>["t"];
-  userName: string;
   conversations: Conversation[];
   activeConv: string;
   setActiveConv: (id: string) => void;
@@ -508,10 +494,13 @@ function SidebarContent({
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand text-[11px] font-bold text-brand-foreground">
-            fy
-          </div>
-          <span className="text-sm font-semibold">fy</span>
+          <Image
+            src="/fy-logo.png"
+            alt="fy."
+            width={96}
+            height={96}
+            className="h-12 w-auto dark:brightness-0 dark:invert"
+          />
         </div>
         <Button onClick={onNewChat} variant="ghost" size="icon" className="h-7 w-7 rounded-lg" title={t("chat_new")}>
           <Plus className="h-4 w-4" />
@@ -557,15 +546,7 @@ function SidebarContent({
       </ScrollArea>
       <Separator />
       <div className="p-3">
-        <button className="flex w-full items-center gap-2.5 rounded-xl p-2 transition-colors hover:bg-sidebar-accent">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand/20 text-sm font-medium text-brand">
-            {userName.charAt(0).toUpperCase()}
-          </div>
-          <div className="flex-1 text-left">
-            <p className="text-sm font-medium">{userName}</p>
-          </div>
-          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-        </button>
+        <UserMenu />
       </div>
     </div>
   );
@@ -576,9 +557,12 @@ function SidebarContent({
 function WelcomeScreen({ t }: { t: ReturnType<typeof useI18n>["t"] }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand text-xl font-bold text-brand-foreground shadow-lg">
-        fy
-      </div>
+      <span
+        aria-label="fy."
+        className="font-display mb-5 select-none text-7xl font-semibold leading-none tracking-tight text-brand md:text-8xl"
+      >
+        fy.
+      </span>
       <h2 className="mb-2 text-2xl font-semibold tracking-tight">{t("chat_welcome_title")}</h2>
       <p className="text-muted-foreground">{t("chat_welcome_sub")}</p>
       <div className="mt-10 flex flex-wrap justify-center gap-2">
@@ -624,10 +608,10 @@ function MessageBubble({
       <div
         className={cn(
           "mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg text-[11px] font-bold",
-          isUser ? "bg-secondary text-secondary-foreground" : "bg-brand text-brand-foreground"
+          isUser ? "bg-secondary text-secondary-foreground" : "bg-brand/10 text-brand"
         )}
       >
-        {isUser ? userInitial : "fy"}
+        {isUser ? userInitial : "Fy"}
       </div>
 
       <div className={cn("flex max-w-[80%] flex-col gap-1.5", isUser && "items-end")}>
@@ -767,7 +751,14 @@ function SourceChips({ sources, label }: { sources: Source[]; label: string }) {
       <span className="text-[10px] text-muted-foreground">{label}:</span>
       {sources.map((src) => {
         let domain = src.uri;
-        try { domain = new URL(src.uri).hostname.replace("www.", ""); } catch { /* invalid URL */ }
+        try { 
+          const url = new URL(src.uri);
+          domain = url.hostname.replace("www.", "");
+          // Vertex AI Search grounding returns redirect URLs; use the title which contains the real domain
+          if (domain === "vertexaisearch.cloud.google.com") {
+            domain = src.title || domain;
+          }
+        } catch { /* invalid URL */ }
         return (
           <a
             key={src.uri}
@@ -800,8 +791,8 @@ function TypingIndicator({
 
   return (
     <div className="flex items-start gap-3">
-      <div className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-brand text-[11px] font-bold text-brand-foreground">
-        fy
+      <div className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-brand/10 text-[11px] font-semibold text-brand">
+        Fy
       </div>
       <div className="chat-bubble-ai flex flex-col gap-1.5 px-4 py-3">
         {statusKey && (
@@ -814,5 +805,14 @@ function TypingIndicator({
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <RequireAuth>
+      <ChatInner />
+      <AuthCollisionDialog />
+    </RequireAuth>
   );
 }

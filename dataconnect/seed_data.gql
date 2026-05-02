@@ -1,0 +1,52 @@
+mutation CreateDemoData @transaction @auth(level: USER, insecureReason: "This is a seed mutation and only intended for development purposes.") {
+  user_insertMany(data: [
+    {
+      id: "b45d2e7d-7b2c-4f7f-8c3b-5e0c8d1d9f8c",
+      email: "user1@example.com",
+      passwordHash: "hashedpassword1",
+      createdAt: "2023-01-01T10:00:00Z"
+    },
+    {
+      id: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      email: "user2@example.com",
+      passwordHash: "hashedpassword2",
+      createdAt: "2023-01-02T11:00:00Z"
+    }
+  ])
+  chatSession_insertMany(data: [
+    {
+      id: "c9d8e7f6-a5b4-3c2d-1e0f-9876543210ab",
+      userId: "b45d2e7d-7b2c-4f7f-8c3b-5e0c8d1d9f8c",
+      startedAt: "2023-01-01T10:05:00Z",
+      language: "en-US",
+      title: "User 1's First Chat"
+    },
+    {
+      id: "f1e2d3c4-b5a6-7890-abcd-ef0123456789",
+      userId: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      startedAt: "2023-01-02T11:10:00Z",
+      language: "es-ES",
+      title: "User 2's Spanish Chat"
+    }
+  ])
+  chatMessage_insertMany(data: [
+    {
+      chatSessionId: "c9d8e7f6-a5b4-3c2d-1e0f-9876543210ab",
+      sender: "user",
+      content: "Hello, how are you?",
+      sentAt: "2023-01-01T10:05:10Z"
+    },
+    {
+      chatSessionId: "c9d8e7f6-a5b4-3c2d-1e0f-9876543210ab",
+      sender: "bot",
+      content: "I am a bot, how can I help you?",
+      sentAt: "2023-01-01T10:05:20Z"
+    },
+    {
+      chatSessionId: "f1e2d3c4-b5a6-7890-abcd-ef0123456789",
+      sender: "user",
+      content: "¿Hola, cómo estás?",
+      sentAt: "2023-01-02T11:10:15Z"
+    }
+  ])
+}

@@ -1,16 +1,24 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
+import { DM_Sans, JetBrains_Mono, Pixelify_Sans } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const pixelifySans = Pixelify_Sans({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -23,6 +31,10 @@ export const metadata: Metadata = {
     description: "Intelligence artificielle conçue par des Malgaches, pour les Malgaches.",
     type: "website",
   },
+  icons: {
+    icon: "/fy-favicon.png",
+    apple: "/fy-favicon.png",
+  },
 };
 
 export default function RootLayout({
@@ -32,9 +44,10 @@ export default function RootLayout({
     <html
       lang="fr"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full`}
+      className={`${dmSans.variable} ${jetbrainsMono.variable} ${pixelifySans.variable} h-full`}
     >
       <body className="h-full antialiased">
+        <Script src="/theme-init.js" strategy="beforeInteractive" />
         <Providers>{children}</Providers>
       </body>
     </html>

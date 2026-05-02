@@ -1,0 +1,30 @@
+type User @table {
+  email: String!
+  passwordHash: String!
+  createdAt: Timestamp!
+  lastLoginAt: Timestamp
+}
+
+type ChatSession @table {
+  user: User!
+  startedAt: Timestamp!
+  language: String!
+  endedAt: Timestamp
+  title: String
+}
+
+type ChatMessage @table {
+  chatSession: ChatSession!
+  sender: String!
+  content: String!
+  sentAt: Timestamp!
+  toolUsed: String
+}
+
+type ToolLog @table {
+  chatMessage: ChatMessage!
+  toolName: String!
+  input: String!
+  output: String
+  error: String
+}

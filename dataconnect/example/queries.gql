@@ -1,0 +1,45 @@
+query ListChatSessions @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  chatSessions(where: {userId: {eq_expr: "auth.uid"}}, orderBy: [{startedAt: DESC}]) {
+    id
+    title
+    startedAt
+    endedAt
+    language
+  }
+}
+
+query GetChatMessagesInSession($chatSessionId: UUID!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  chatMessages(where: {
+    _and: [
+      {chatSessionId: {eq: $chatSessionId}},
+      {chatSession: {userId: {eq_expr: "auth.uid"}}}
+    ]
+  }, orderBy: [{sentAt: ASC}]) {
+    id
+    sender
+    content
+    sentAt
+    toolUsed
+  }
+}
+
+mutation CreateChatMessage($chatSessionId: UUID!, $sender: String!, $content: String!) @auth(level: USER) {
+  chatMessage_insert(data: {
+    chatSessionId: $chatSessionId,
+    sender: $sender,
+    content: $content,
+    sentAt_expr: "request.time"
+  }) {
+    id
+  }
+}
+
+mutation EndChatSession($chatSessionId: UUID!) @auth(level: USER) {
+  chatSession_update(
+    key: {id: $chatSessionId},
+    data: {endedAt_expr: "request.time"},
+    where: {userId: {eq_expr: "auth.uid"}}
+  ) {
+    id
+  }
+}
