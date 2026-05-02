@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/firebase/auth-context";
 import { LangSwitcher } from "@/components/lang-switcher";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -70,7 +69,6 @@ export default function LoginPage() {
         </Link>
         <div className="flex items-center gap-2">
           <LangSwitcher />
-          <ThemeToggle />
         </div>
       </div>
 

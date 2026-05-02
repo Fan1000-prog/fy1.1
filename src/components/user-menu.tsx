@@ -24,7 +24,7 @@ function initials(name: string | null | undefined, fallback: string): string {
 }
 
 export function UserMenu() {
-  const { user, firebaseUser } = useAuth();
+  const { user, firebaseUser, reportCollision } = useAuth();
   const { t } = useI18n();
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -41,9 +41,13 @@ export function UserMenu() {
     setBusy(true);
     try {
       await linkAnonymousToGoogle();
+      setBusy(false);
     } catch (err) {
-      console.error(err);
-      toast.error(t("auth_error_generic"));
+      const handled = reportCollision(err as Parameters<typeof reportCollision>[0]);
+      if (!handled) {
+        console.error(err);
+        toast.error(t("auth_error_generic"));
+      }
       setBusy(false);
     }
   }

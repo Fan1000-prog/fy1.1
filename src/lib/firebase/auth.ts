@@ -2,8 +2,8 @@ import { auth, db } from "./client";
 import {
   GoogleAuthProvider,
   signInAnonymously,
-  signInWithRedirect,
-  linkWithRedirect,
+  signInWithPopup,
+  linkWithPopup,
   signOut,
   type User,
 } from "firebase/auth";
@@ -28,8 +28,9 @@ export interface FirebaseUser {
 
 const googleProvider = new GoogleAuthProvider();
 
-export async function signInWithGoogle(): Promise<void> {
-  await signInWithRedirect(auth, googleProvider);
+export async function signInWithGoogle(): Promise<User> {
+  const result = await signInWithPopup(auth, googleProvider);
+  return result.user;
 }
 
 export async function signInGuest(): Promise<User> {
@@ -37,10 +38,11 @@ export async function signInGuest(): Promise<User> {
   return result.user;
 }
 
-export async function linkAnonymousToGoogle(): Promise<void> {
+export async function linkAnonymousToGoogle(): Promise<User> {
   if (!auth.currentUser) throw new Error("No current user to link");
   if (!auth.currentUser.isAnonymous) throw new Error("Current user is not anonymous");
-  await linkWithRedirect(auth.currentUser, googleProvider);
+  const result = await linkWithPopup(auth.currentUser, googleProvider);
+  return result.user;
 }
 
 export async function logOut(): Promise<void> {

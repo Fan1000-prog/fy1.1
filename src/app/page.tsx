@@ -6,7 +6,6 @@ import { useI18n } from "@/lib/i18n";
 import { LogoCloud } from "@/components/ui/logo-cloud";
 import UniqueLoading from "@/components/ui/morph-loading";
 import { LangSwitcher } from "@/components/lang-switcher";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   Globe,
@@ -61,7 +60,6 @@ export default function LandingPage() {
           </nav>
           <div className="flex items-center gap-2">
             <LangSwitcher />
-            <ThemeToggle />
             <Link href="/login">
               <Button variant="ghost" size="sm" className="hidden text-sm md:inline-flex">
                 {t("nav_login")}

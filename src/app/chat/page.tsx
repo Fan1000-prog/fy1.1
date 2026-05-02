@@ -9,7 +9,6 @@ import { detectIntent } from "@/lib/intent";
 import { useVoiceRecorder } from "@/hooks/useVoiceRecorder";
 import type { Message, Source, VideoMeta, AttachedFile } from "@/types/message";
 import { LangSwitcher } from "@/components/lang-switcher";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -330,7 +329,6 @@ function ChatInner() {
           </div>
           <div className="flex items-center gap-2">
             <LangSwitcher />
-            <ThemeToggle />
           </div>
         </header>
 
