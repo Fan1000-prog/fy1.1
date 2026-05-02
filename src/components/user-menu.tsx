@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ChevronDown, LogOut, Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -25,7 +24,6 @@ function initials(name: string | null | undefined, fallback: string): string {
 export function UserMenu() {
   const { user, firebaseUser, reportCollision } = useAuth();
   const { t } = useI18n();
-  const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -54,18 +52,14 @@ export function UserMenu() {
 
   async function handleLogout() {
     setBusy(true);
+    setOpen(false);
     try {
-      console.log("Logging out...");
       await logOut();
-      console.log("Logout successful, redirecting to login...");
-      setOpen(false);
-      setBusy(false);
-      // Use window.location for full page navigation to clear all state
-      window.location.href = "/login";
     } catch (err) {
       console.error("Logout error:", err);
       toast.error(t("auth_error_generic"));
-      setBusy(false);
+    } finally {
+      window.location.replace("/login");
     }
   }
 

@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { AnimatePresence } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
 import { detectIntent } from "@/lib/intent";
 import { useVoiceRecorder } from "@/hooks/useVoiceRecorder";
@@ -34,6 +35,7 @@ import { useAuth } from "@/lib/firebase/auth-context";
 import { RequireAuth } from "@/components/require-auth";
 import { UserMenu } from "@/components/user-menu";
 import { AuthCollisionDialog } from "@/components/auth-collision-dialog";
+import { AlertBanner } from "@/components/ui/alert-banner";
 import {
   createChat,
   getChatMessages,
@@ -164,12 +166,30 @@ function ChatInner() {
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const [attachedFile, setAttachedFile] = useState<(AttachedFile & { base64: string }) | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const voice = useVoiceRecorder();
+
+  useEffect(() => {
+    const uid = user?.uid;
+    if (!uid) return;
+    const key = `fy_welcome_seen_${uid}`;
+    if (typeof window !== "undefined" && !window.localStorage.getItem(key)) {
+      setShowWelcome(true);
+    }
+  }, [user?.uid]);
+
+  function dismissWelcome() {
+    const uid = user?.uid;
+    if (uid && typeof window !== "undefined") {
+      window.localStorage.setItem(`fy_welcome_seen_${uid}`, "1");
+    }
+    setShowWelcome(false);
+  }
 
   useEffect(() => {
     const uid = user?.uid;
@@ -452,6 +472,44 @@ function ChatInner() {
 
   return (
     <div className="flex h-full bg-background">
+      <AnimatePresence>
+        {showWelcome && (
+          <div className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4">
+            <div className="pointer-events-auto w-full max-w-md">
+              <AlertBanner
+                variant="success"
+                onDismiss={dismissWelcome}
+                title="Welcome to Fy 1.1"
+                description={
+                  <div className="space-y-2">
+                    <p>
+                      <span className="font-medium text-foreground">French:</span>{" "}
+                      Bienvenue dans la version test de Fy 1.1, une IA conçue pour autonomiser les
+                      Malgaches. Veuillez noter que Fy est encore en développement, et bien que nous
+                      nous efforcions d&apos;offrir une expérience fluide, certaines fonctionnalités
+                      peuvent encore présenter des limitations.
+                    </p>
+                    <p>
+                      <span className="font-medium text-foreground">Malagasy:</span>{" "}
+                      Tongasoa ato amin&apos;ny Fy 1.1, ilay IA natao hanmpy sy anaraka anao
+                      amin&apos;ny fiainanano andavanandro. Mariho fa mbola ao anaty
+                      &apos;developement continu&apos; i Fy, ary mety mbola misy fetrany vitsivitsy
+                      zavatra azony atao.
+                    </p>
+                    <p>
+                      <span className="font-medium text-foreground">English:</span>{" "}
+                      Welcome to the test version of Fy 1.1, an AI built to empower Malagasy people.
+                      Please note that Fy is still under development, and while we strive for a
+                      smooth experience, some features may still have limitations.
+                    </p>
+                  </div>
+                }
+                primaryAction={{ label: "Got it", onClick: dismissWelcome }}
+              />
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
       <aside className="hidden w-64 flex-shrink-0 flex-col border-r border-border bg-sidebar md:flex">
         <SidebarContent
           t={t}
