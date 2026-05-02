@@ -92,14 +92,14 @@ export function UserMenu() {
         )}
         {isAnon && (
           <>
-            <DropdownMenuItem onSelect={handleUpgrade} disabled={busy}>
+            <DropdownMenuItem onClick={handleUpgrade} disabled={busy}>
               <Sparkles className="mr-2 h-4 w-4" />
               {t("menu_upgrade")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>
         )}
-        <DropdownMenuItem onSelect={handleLogout} disabled={busy}>
+        <DropdownMenuItem onClick={handleLogout} disabled={busy}>
           <LogOut className="mr-2 h-4 w-4" />
           {t("menu_logout")}
         </DropdownMenuItem>

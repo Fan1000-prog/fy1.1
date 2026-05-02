@@ -484,8 +484,8 @@ function ChatInner() {
                   <div className="space-y-2">
                     <p>
                       <span className="font-medium text-foreground">French:</span>{" "}
-                      Bienvenue dans la version test de Fy 1.1, une IA conçue pour autonomiser les
-                      Malgaches. Veuillez noter que Fy est encore en développement, et bien que nous
+                      Bienvenue dans la version test de Fy 1.1. Veuillez noter que Fy est encore en
+                      développement, et bien que nous
                       nous efforcions d&apos;offrir une expérience fluide, certaines fonctionnalités
                       peuvent encore présenter des limitations.
                     </p>
