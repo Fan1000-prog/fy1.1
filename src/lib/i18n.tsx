@@ -38,6 +38,9 @@ export const translations = {
     cta_title: "Prêt à commencer ?",
     cta_subtitle: "Rejoignez la communauté fy et explorez l'IA sans limites.",
     cta_button: "Créer un compte",
+    // Partners
+    partners_eyebrow: "Propulsé par les meilleurs.",
+    partners_title: "Construit avec des outils de confiance.",
     // Footer
     footer_tagline: "Fait par des Malagasy, pour les Malagasy.",
     footer_rights: "Tous droits réservés.",
@@ -127,6 +130,9 @@ export const translations = {
     cta_title: "Vonona hanomboka?",
     cta_subtitle: "Midira ao anatin'ny fiarahamonina fy ary manomboa mampiasa IA tsy misy fetra.",
     cta_button: "Mamorona kaonty",
+    // Partners
+    partners_eyebrow: "Atosiky ny tsara indrindra.",
+    partners_title: "Naorina amin'ny fitaovana azo itokisana.",
     // Footer
     footer_tagline: "Vita Malagasy ho an'ny Malagasy.",
     footer_rights: "Zo rehetra voatokana.",
@@ -216,6 +222,9 @@ export const translations = {
     cta_title: "Ready to start?",
     cta_subtitle: "Join the fy community and explore AI without limits.",
     cta_button: "Create account",
+    // Partners
+    partners_eyebrow: "Powered by the best.",
+    partners_title: "Built with trusted tools.",
     // Footer
     footer_tagline: "Made by Malagasy, for Malagasy.",
     footer_rights: "All rights reserved.",

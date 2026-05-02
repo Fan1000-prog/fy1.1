@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useI18n } from "@/lib/i18n";
@@ -23,7 +24,6 @@ import {
   Plus,
   MessageSquare,
   Menu,
-  Sparkles,
   StopCircle,
   Paperclip,
   X,
@@ -327,13 +327,6 @@ function ChatInner() {
                 />
               </SheetContent>
             </Sheet>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">Fy</span>
-            </div>
-            <Badge variant="secondary" className="hidden gap-1 rounded-full text-xs sm:flex">
-              <Sparkles className="h-3 w-3 text-brand" />
-              Pro
-            </Badge>
           </div>
           <div className="flex items-center gap-2">
             <LangSwitcher />
@@ -501,7 +494,13 @@ function SidebarContent({
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold">Fy</span>
+          <Image
+            src="/fy-logo.png"
+            alt="fy."
+            width={96}
+            height={96}
+            className="h-12 w-auto dark:brightness-0 dark:invert"
+          />
         </div>
         <Button onClick={onNewChat} variant="ghost" size="icon" className="h-7 w-7 rounded-lg" title={t("chat_new")}>
           <Plus className="h-4 w-4" />
@@ -558,9 +557,12 @@ function SidebarContent({
 function WelcomeScreen({ t }: { t: ReturnType<typeof useI18n>["t"] }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand/10 text-xl font-semibold text-brand">
-        Fy
-      </div>
+      <span
+        aria-label="fy."
+        className="font-display mb-5 select-none text-7xl font-semibold leading-none tracking-tight text-brand md:text-8xl"
+      >
+        fy.
+      </span>
       <h2 className="mb-2 text-2xl font-semibold tracking-tight">{t("chat_welcome_title")}</h2>
       <p className="text-muted-foreground">{t("chat_welcome_sub")}</p>
       <div className="mt-10 flex flex-wrap justify-center gap-2">

@@ -7,8 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+  --font-sans: var(--font-sans), "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
+  --font-display: var(--font-display), "Pixelify Sans", "Silkscreen", monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -62,7 +63,7 @@
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.91 0 0);
   --input: oklch(0.91 0 0);
-  --ring: oklch(0.75 0.15 60);
+  --ring: oklch(0.38 0.08 152);
   --radius: 0.75rem;
   --sidebar: oklch(0.97 0 0);
   --sidebar-foreground: oklch(0.13 0 0);
@@ -71,11 +72,11 @@
   --sidebar-accent: oklch(0.93 0 0);
   --sidebar-accent-foreground: oklch(0.13 0 0);
   --sidebar-border: oklch(0.91 0 0);
-  --sidebar-ring: oklch(0.75 0.15 60);
-  /* fy brand: warm amber-gold */
-  --brand: oklch(0.75 0.17 60);
-  --brand-foreground: oklch(0.13 0 0);
-  --brand-muted: oklch(0.95 0.05 60);
+  --sidebar-ring: oklch(0.38 0.08 152);
+  /* fy brand: forest green */
+  --brand: #013220;
+  --brand-foreground: oklch(0.99 0 0);
+  --brand-muted: oklch(0.96 0.02 152);
 }
 
 .dark {
@@ -96,19 +97,19 @@
   --destructive: oklch(0.65 0.2 22);
   --border: oklch(1 0 0 / 8%);
   --input: oklch(1 0 0 / 10%);
-  --ring: oklch(0.75 0.17 60);
+  --ring: oklch(0.55 0.10 152);
   --sidebar: oklch(0.13 0 0);
   --sidebar-foreground: oklch(0.97 0 0);
-  --sidebar-primary: oklch(0.75 0.17 60);
-  --sidebar-primary-foreground: oklch(0.13 0 0);
+  --sidebar-primary: oklch(0.55 0.10 152);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
   --sidebar-accent: oklch(0.19 0 0);
   --sidebar-accent-foreground: oklch(0.97 0 0);
   --sidebar-border: oklch(1 0 0 / 6%);
-  --sidebar-ring: oklch(0.75 0.17 60);
+  --sidebar-ring: oklch(0.55 0.10 152);
   /* fy brand dark */
-  --brand: oklch(0.78 0.17 60);
-  --brand-foreground: oklch(0.11 0 0);
-  --brand-muted: oklch(0.22 0.05 60);
+  --brand: oklch(0.55 0.10 152);
+  --brand-foreground: oklch(0.99 0 0);
+  --brand-muted: oklch(0.20 0.05 152);
 }
 
 @layer base {
@@ -120,21 +121,25 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  section[id] {
+    scroll-margin-top: 72px;
   }
 }
 
 /* Gradient mesh background for hero */
 .fy-hero-gradient {
   background:
-    radial-gradient(ellipse 80% 60% at 20% 40%, oklch(0.75 0.17 60 / 0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 80% at 80% 60%, oklch(0.65 0.15 200 / 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 20% 40%, oklch(0.38 0.08 152 / 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 60%, oklch(0.55 0.10 152 / 0.07) 0%, transparent 60%),
     var(--background);
 }
 
 .dark .fy-hero-gradient {
   background:
-    radial-gradient(ellipse 80% 60% at 20% 40%, oklch(0.75 0.17 60 / 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 80% at 80% 60%, oklch(0.65 0.15 200 / 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 20% 40%, oklch(0.38 0.08 152 / 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 60%, oklch(0.55 0.10 152 / 0.08) 0%, transparent 60%),
     var(--background);
 }
 
@@ -169,6 +174,44 @@
   border-radius: 99px;
 }
 
+/* Scroll reveal animations */
+.fy-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.fy-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Word-by-word reveal for headlines */
+.fy-reveal-words .fy-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.5em);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--fy-i, 0) * 80ms);
+}
+.fy-reveal-words.is-visible .fy-word {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fy-reveal,
+  .fy-reveal-words .fy-word {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Typing indicator animation */
 @keyframes typing-dot {
   0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
@@ -177,3 +220,35 @@
 .typing-dot:nth-child(1) { animation: typing-dot 1.2s ease-in-out 0s infinite; }
 .typing-dot:nth-child(2) { animation: typing-dot 1.2s ease-in-out 0.2s infinite; }
 .typing-dot:nth-child(3) { animation: typing-dot 1.2s ease-in-out 0.4s infinite; }
+
+/* Morph loading keyframes */
+@keyframes morph-0 {
+  0%, 100% { transform: translate(0, 0) scale(1); border-radius: 0%; }
+  25% { transform: translate(20px, -20px) scale(1.2); border-radius: 50%; }
+  50% { transform: translate(40px, 0) scale(0.8); border-radius: 25%; }
+  75% { transform: translate(20px, 20px) scale(1.1); border-radius: 75%; }
+}
+@keyframes morph-1 {
+  0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); border-radius: 0%; }
+  25% { transform: translate(-20px, -20px) scale(1.3) rotate(90deg); border-radius: 50%; }
+  50% { transform: translate(-40px, 0) scale(0.7) rotate(180deg); border-radius: 25%; }
+  75% { transform: translate(-20px, 20px) scale(1.2) rotate(270deg); border-radius: 75%; }
+}
+@keyframes morph-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); border-radius: 0%; }
+  25% { transform: translate(-20px, 20px) scale(0.9); border-radius: 100%; }
+  50% { transform: translate(0, 40px) scale(1.4); border-radius: 0%; }
+  75% { transform: translate(20px, 20px) scale(0.8); border-radius: 50%; }
+}
+@keyframes morph-3 {
+  0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); border-radius: 0%; }
+  25% { transform: translate(20px, 20px) scale(1.1) rotate(-90deg); border-radius: 25%; }
+  50% { transform: translate(0, -40px) scale(1.3) rotate(-180deg); border-radius: 100%; }
+  75% { transform: translate(-20px, -20px) scale(0.9) rotate(-270deg); border-radius: 75%; }
+}
+
+/* Retro-digital pixel display font for headings */
+h1, .font-display {
+  font-family: var(--font-display), "Pixelify Sans", "Silkscreen", monospace;
+  letter-spacing: 0.01em;
+}
