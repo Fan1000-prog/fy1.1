@@ -3,6 +3,8 @@ const VERTEX_BASE = "https://aiplatform.googleapis.com/v1/publishers/google/mode
 export interface GeminiPart {
   text?: string;
   inline_data?: { mime_type: string; data: string };
+  functionCall?: { name: string; args: Record<string, unknown> };
+  functionResponse?: { name: string; response: Record<string, unknown> };
 }
 
 export interface GeminiContent {
@@ -19,10 +21,12 @@ export interface GeminiOptions {
   systemPrompt?: string;
   contents: GeminiContent[];
   tools?: object[];
+  signal?: AbortSignal;
 }
 
 export interface GeminiResult {
   text: string;
+  functionCall?: { name: string; args: Record<string, unknown> };
   groundingChunks?: GroundingChunk[];
 }
 
@@ -31,6 +35,7 @@ export async function callGemini({
   systemPrompt,
   contents,
   tools,
+  signal,
 }: GeminiOptions): Promise<GeminiResult> {
   const apiKey = process.env.VERTEX_API_KEY;
   if (!apiKey) throw new Error("VERTEX_API_KEY not configured");
@@ -43,6 +48,7 @@ export async function callGemini({
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
+    signal,
   });
 
   if (!res.ok) {
@@ -51,9 +57,13 @@ export async function callGemini({
   }
 
   const data = await res.json();
-  const text: string = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+  const parts: GeminiPart[] = data.candidates?.[0]?.content?.parts ?? [];
+
+  const text = parts.map((p) => p.text ?? "").join("").trim();
+  const fcPart = parts.find((p) => p.functionCall);
+  const functionCall = fcPart?.functionCall;
   const groundingChunks: GroundingChunk[] =
     data.candidates?.[0]?.groundingMetadata?.groundingChunks ?? [];
 
-  return { text, groundingChunks };
+  return { text, functionCall, groundingChunks };
 }
