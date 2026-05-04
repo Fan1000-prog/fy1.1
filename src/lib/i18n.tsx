@@ -96,6 +96,15 @@ export const translations = {
     chat_attach_file: "Joindre un fichier",
     chat_remove_file: "Retirer le fichier",
     login_error: "Échec de la connexion. Veuillez réessayer.",
+    // Feedback
+    feedback_button: "Feedback",
+    feedback_title: "Envoyer un retour",
+    feedback_helper: "Dis-nous ce qui marche, ce qui ne va pas, ou ce que tu aimerais que Fy fasse. N'inclus pas de mots de passe ou de données personnelles.",
+    feedback_placeholder: "Ton retour…",
+    feedback_submit: "Envoyer",
+    feedback_cancel: "Annuler",
+    feedback_success: "Merci — retour bien reçu.",
+    feedback_error: "Échec de l'envoi. Réessayez.",
   },
   mg: {
     // Nav
@@ -188,6 +197,15 @@ export const translations = {
     chat_attach_file: "Mampiditra rakitra",
     chat_remove_file: "Nesorina ny rakitra",
     login_error: "Tsy nahomby ny fidirana. Andramo indray.",
+    // Feedback
+    feedback_button: "Hevitra",
+    feedback_title: "Mandefa hevitra",
+    feedback_helper: "Lazao izay mandeha tsara, izay tsy mety, na izay tianao hataon'i Fy. Aza ampidirina ny teny miafina na ny vaovao manokana.",
+    feedback_placeholder: "Ny hevitrao…",
+    feedback_submit: "Alefa",
+    feedback_cancel: "Aoka",
+    feedback_success: "Misaotra — voaray ny hevitra.",
+    feedback_error: "Tsy nahomby ny fandefasana. Andramo indray.",
   },
   en: {
     // Nav
@@ -280,6 +298,15 @@ export const translations = {
     chat_attach_file: "Attach a file",
     chat_remove_file: "Remove file",
     login_error: "Login failed. Please try again.",
+    // Feedback
+    feedback_button: "Feedback",
+    feedback_title: "Send feedback",
+    feedback_helper: "Tell us what's working, what's broken, or what you wish Fy did. Don't include passwords or personal data.",
+    feedback_placeholder: "Your feedback…",
+    feedback_submit: "Send",
+    feedback_cancel: "Cancel",
+    feedback_success: "Thanks — feedback received.",
+    feedback_error: "Couldn't send. Try again.",
   },
 };
 
