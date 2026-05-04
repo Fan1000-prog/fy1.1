@@ -61,10 +61,11 @@ client (chat page)
 
 1. **Default to action.** When the user request implies a tool call (search, video summary, transcription), invoke the tool — don't ask permission for cheap/safe operations.
 2. **Confirm before expensive/destructive.** For image generation: propose in prose ("I can generate that image — confirm?") and wait. The actual generation runs through the existing regex/client path on the next turn — Fy never calls it via function-calling.
-3. **Suggest next step.** End substantive replies with one concrete follow-up offer woven into the prose. Never a bulleted "Suggested actions" list. Skip when the reply is trivially short or obviously terminal.
+3. **Suggest next step — by name.** End substantive replies with one concrete follow-up offer woven into the prose, **naming the relevant tool when applicable** ("Want me to search the web for recent stats?" or "I can pull a YouTube summary on the topic if useful."). Never a bulleted "Suggested actions" list. Skip when the reply is trivially short or obviously terminal.
 4. **Chain when needed.** If answering well requires multiple lookups, do them in one turn. Don't stop after one search if the answer isn't there yet. Server allows ≤3 rounds.
 5. **Cite tool use briefly.** When a tool ran, mention it in one short clause ("I searched the web — …"). Don't dump raw results.
 6. **Stay in user's language.** (Existing rule, unchanged.)
+7. **Length-adaptive tone.** Concision applies to trivial Q&A and chitchat (1-3 sentences). For substantive requests (writing, explanations, content creation), deliver the full content at the length it needs and allow a brief warm opener ("Sure — ", "Happy to help — ") before the content. Never truncate substantive output just to stay short. Skip empty closers ("Hope this helps!").
 
 **Tone shift:** from "answers questions" → "collaborator who moves the task forward."
 
@@ -214,6 +215,7 @@ No automated tests in v1. Verify manually:
 | Tool throws (e.g., bad URL) | Fy apologizes in prose, doesn't 500 |
 | 4-step request that needs >3 tool calls | Loop caps at 3, Fy summarizes what it has + offers to continue |
 | Plain chitchat ("salut Fy") | No tool call, conversational reply, no forced follow-up |
+| "Help me write a 15-sentence essay on gratitude" | Warm opener ("Sure — "), full essay at requested length, ends with one offer that NAMES a tool ("Want me to search the web or pull a YouTube summary for supporting material?") |
 
 ## 9. Rollout
 
