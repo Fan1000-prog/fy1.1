@@ -9,5 +9,19 @@ service cloud.firestore {
         allow read, write: if request.auth != null && request.auth.uid == uid;
       }
     }
+
+    // IMPORTANT: keep `hasOnly([...])` field list in sync with submitFeedback() in
+    // src/lib/firebase/feedback.ts. If you add a field there, add it here.
+    match /feedback/{id} {
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.message is string
+                    && request.resource.data.message.size() > 0
+                    && request.resource.data.message.size() <= 2000
+                    && request.resource.data.keys().hasOnly(
+                         ['uid','email','message','createdAt','userAgent','path']
+                       );
+      allow read, update, delete: if false;  // admin-only via console
+    }
   }
 }
