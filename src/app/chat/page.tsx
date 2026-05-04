@@ -35,6 +35,7 @@ import { useAuth } from "@/lib/firebase/auth-context";
 import { RequireAuth } from "@/components/require-auth";
 import { UserMenu } from "@/components/user-menu";
 import { AuthCollisionDialog } from "@/components/auth-collision-dialog";
+import { FeedbackButton } from "@/components/feedback-button";
 import { AlertBanner } from "@/components/ui/alert-banner";
 import {
   createChat,
@@ -1022,6 +1023,7 @@ export default function ChatPage() {
     <RequireAuth>
       <ChatInner />
       <AuthCollisionDialog />
+      <FeedbackButton />
     </RequireAuth>
   );
 }
