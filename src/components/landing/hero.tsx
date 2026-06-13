@@ -13,7 +13,7 @@ import { MagneticButton } from "@/components/motion/magnetic-button";
 export function Hero() {
   const { t } = useI18n();
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative isolate overflow-hidden">
       {/* Full-bleed background image + grading */}
       <div className="absolute inset-0 -z-10">
         <Parallax distance={60} className="h-[120%] w-full">
@@ -28,7 +28,7 @@ export function Hero() {
             />
           </div>
         </Parallax>
-        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/40 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-brand/80 via-brand/55 to-brand/90" />
         <div className="fy-grain" />
       </div>
 
@@ -38,16 +38,16 @@ export function Hero() {
         </Reveal>
 
         <h1 className="mb-6 max-w-3xl text-5xl font-semibold tracking-tight md:text-7xl">
-          <RevealWords as="span" text={t("hero_title_1")} className="block" />
+          <RevealWords as="span" text={t("hero_title_1")} className="block text-white" />
           <RevealWords
             as="span"
             text={t("hero_title_2")}
-            className="block bg-gradient-to-r from-brand via-emerald-500 to-brand bg-clip-text text-transparent"
+            className="block text-emerald-200"
           />
         </h1>
 
         <Reveal delay={200}>
-          <p className="mb-10 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+          <p className="mb-10 max-w-xl text-base leading-relaxed text-white/85 md:text-lg">
             {t("hero_subtitle")}
           </p>
         </Reveal>
@@ -58,14 +58,14 @@ export function Hero() {
               <Link href="/login">
                 <Button
                   size="lg"
-                  className="gap-2 rounded-full bg-brand px-8 text-brand-foreground hover:bg-brand/90"
+                  className="gap-2 rounded-full bg-white px-8 text-brand hover:bg-white/90"
                 >
                   {t("hero_cta")}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
             </MagneticButton>
-            <p className="text-xs text-muted-foreground">{t("hero_cta_sub")}</p>
+            <p className="text-xs text-white/70">{t("hero_cta_sub")}</p>
           </div>
         </Reveal>
 
