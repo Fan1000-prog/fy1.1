@@ -21,7 +21,7 @@ export function Story() {
             />
           </div>
         </Parallax>
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30" />
       </div>
 
       <div className="mx-auto max-w-3xl px-6">
@@ -36,7 +36,7 @@ export function Story() {
           className="mt-4 block text-3xl font-semibold tracking-tight md:text-5xl"
         />
         <Reveal delay={200}>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-foreground/80">
             {t("story_body")}
           </p>
         </Reveal>
