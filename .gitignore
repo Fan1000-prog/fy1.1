@@ -68,3 +68,6 @@ ui-debug.log
 *.p12
 *.pfx
 *.cer
+
+# eval outputs are regenerable and quota-specific
+evals/results/
