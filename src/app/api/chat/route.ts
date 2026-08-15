@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
     : "fr";
   const lastUserMessage = [...messages].reverse().find((m) => m.role === "user");
   const detectedLang = lastUserMessage
-    ? detectLanguage(lastUserMessage.content)
+    ? detectLanguage(lastUserMessage.content, locale)
     : locale;
   const systemPrompt = buildSystemPrompt(locale, detectedLang);
 
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
 
   try {
     for (let rounds = 0; rounds < MAX_ROUNDS; rounds++) {
-      const { text, functionCall } = await callGemini({
+      const { text, functionCall, parts } = await callGemini({
         systemPrompt,
         contents: turn,
         tools: [{ function_declarations: TOOL_DECLARATIONS }],
@@ -111,14 +111,20 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      turn.push({
-        role: "model",
-        parts: [{ functionCall }],
-      });
+      // Echo the model's own parts back verbatim — thinking models attach a
+      // thoughtSignature to the functionCall and drop their reasoning chain if
+      // it is stripped, which silently degrades every round after the first.
+      turn.push({ role: "model", parts });
       turn.push({
         role: "user",
         parts: [
-          { functionResponse: { name: functionCall.name, response: { result } } },
+          {
+            functionResponse: {
+              name: functionCall.name,
+              ...(functionCall.id ? { id: functionCall.id } : {}),
+              response: { result },
+            },
+          },
         ],
       });
     }

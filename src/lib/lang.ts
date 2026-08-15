@@ -24,16 +24,42 @@ export const PROACTIVE_INSTRUCTIONS: Record<Lang, string> = {
   en: "PROACTIVITY: You are a collaborator, not a FAQ. (1) When a request implies a safe tool (web search, video summary, transcription), CALL the tool — don't ask permission. (2) For image generation, propose it and wait for explicit confirmation before triggering. (3) End substantive replies with ONE concrete next-step offer that NAMES the relevant tool when applicable — e.g. 'Want me to search the web for recent stats on this?' or 'I can pull a YouTube summary on the topic if useful.' Woven into prose, never a 'Suggested actions' list. Skip if the reply is trivial or clearly terminal. (4) If answering well needs multiple lookups, chain them in one turn (server allows up to 3 rounds). Don't stop after one search if the answer isn't there yet. (5) When a tool ran, mention it in one short clause ('I searched the web — '); don't dump raw results.",
 };
 
-export function detectLanguage(text: string): Lang {
+const FR_WORDS =
+  /\b(je|tu|il|elle|nous|vous|ils|elles|le|la|les|un|une|des|est|sont|au|du|de|et|en|que|qui|pas|ne|se|ce|mon|ma|mes|ton|ta|tes|son|sa|ses|bonjour|salut|bonsoir|merci|comment|pourquoi|quand|bien|oui|non|avec|pour|sur|dans|par|très|aussi|peux|peux-tu|fais|donne|explique|résume)\b/g;
+
+const MG_WORDS =
+  /\b(aho|anao|izy|isika|izahay|ianao|ianareo|ny|izay|dia|amin|amin'ny|ao|ao amin'ny|any|eto|eo|fa|ary|ka|mba|tsy|sy|nefa|inona|ahoana|manao ahoana|aiza|iza|firy|oviana|salama|manahoana|misaotra|azafady|veloma|tsara|ratsy|tonga|manao|koa|hoe|raha|efa|mbola|ity|io|ireo|ilay|izao|izany|ireto|misy|mila|tia|afaka|mety|ho|hanao|azo|atao|omeo|lazao|hazavao|fintino|adikao|karohy|valio|toy|noho|satria|rehefa|araka|tompoko)\b/g;
+
+/**
+ * Cheap heuristic language guess for the *reply* language.
+ *
+ * Returns `fallback` (the user's chosen UI locale) when the text carries no
+ * signal — a bare URL, a name, an emoji. Defaulting to English there would make
+ * a Malagasy-first product answer Malagasy users in English.
+ */
+export function detectLanguage(text: string, fallback: Lang = "en"): Lang {
   const t = text.toLowerCase();
   const frScore =
     (text.match(/[éèêëàâùûüôîïç]/gi) ?? []).length * 2 +
-    (t.match(/\b(je|tu|il|elle|nous|vous|ils|elles|le|la|les|un|une|des|est|sont|au|du|de|et|en|que|qui|pas|ne|se|ce|mon|ma|mes|ton|ta|tes|son|sa|ses|bonjour|salut|bonsoir|merci|comment|pourquoi|quand|bien|oui|non|avec|pour|sur|dans|par|très|aussi)\b/g) ?? []).length;
+    (t.match(FR_WORDS) ?? []).length;
+  // Malagasy-specific orthography: the `n'` / `'ny` elision and long agglutinated
+  // verb prefixes rarely appear in French or English text.
   const mgScore =
-    (t.match(/\b(aho|anao|izy|isika|izahay|ianareo|ny|izay|dia|amin|ao|fa|ary|ka|mba|tsy|sy|nefa|inona|aiza|iza|firy|salama|misaotra|veloma|tsara|tonga|manao|manahoana|mazoto|koa|hoe|raha|amin'ny|efa|mbola)\b/g) ?? []).length;
-  if (frScore > 0 && frScore >= mgScore) return "fr";
-  if (mgScore > 0 && mgScore > frScore) return "mg";
-  return "en";
+    (t.match(MG_WORDS) ?? []).length +
+    (t.match(/\b\w+n'(?:ny|i|ilay)\b/g) ?? []).length * 2 +
+    (t.match(/\b(?:mi|ma|man|mam|mah|nan|nam|ni|na|ho|hi|voa|tafa)[a-z']{4,}\b/g) ?? [])
+      .length;
+
+  if (frScore === 0 && mgScore === 0) {
+    // No romance/Malagasy markers at all — treat clearly ASCII-wordy input as
+    // English, anything else as the user's locale.
+    return /\b(the|and|is|are|what|how|why|you|please|can|write|explain)\b/.test(t)
+      ? "en"
+      : fallback;
+  }
+  if (mgScore > frScore) return "mg";
+  if (frScore > mgScore) return "fr";
+  return fallback;
 }
 
 export function buildSystemPrompt(locale: Lang, detectedLang: Lang): string {

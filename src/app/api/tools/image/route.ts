@@ -1,12 +1,17 @@
 import { NextRequest } from "next/server";
 import { callGemini } from "@/lib/gemini";
+import { FAST_MODEL, IMAGE_MODEL } from "@/lib/models";
 import type { Lang } from "@/lib/lang";
 
-const IMAGEN_MODEL = "imagen-3.0-generate-001";
-const VERTEX_BASE = "https://aiplatform.googleapis.com/v1/publishers/google/models";
+const UNAVAILABLE_MESSAGES: Record<Lang, string> = {
+  mg: "Tsy afaka mamorona ity sary ity aho izao.",
+  en: "I can't generate this image right now.",
+  fr: "Je ne peux pas générer cette image pour le moment.",
+};
 
 async function translateToEnglish(prompt: string): Promise<string> {
   const { text } = await callGemini({
+    model: FAST_MODEL,
     contents: [
       {
         role: "user",
@@ -22,62 +27,48 @@ async function translateToEnglish(prompt: string): Promise<string> {
 }
 
 export async function POST(req: NextRequest) {
+  let locale: Lang = "fr";
   try {
-    const { prompt, locale = "fr" }: { prompt: string; locale: Lang } =
-      await req.json();
+    const body: { prompt?: string; locale?: Lang } = await req.json();
+    locale = body.locale ?? "fr";
+    const prompt = body.prompt?.trim();
 
-    if (!prompt?.trim()) {
+    if (!prompt) {
       return Response.json({ error: "Prompt required" }, { status: 400 });
     }
-
-    const apiKey = process.env.VERTEX_API_KEY;
-    if (!apiKey) {
-      return Response.json({ error: "image_service_unavailable" }, { status: 200 });
+    if (!process.env.VERTEX_API_KEY) {
+      return Response.json({ error: "image_service_unavailable" });
     }
 
-    const englishPrompt =
-      locale !== "en" ? await translateToEnglish(prompt) : prompt;
+    const englishPrompt = locale === "en" ? prompt : await translateToEnglish(prompt);
 
-    const res = await fetch(
-      `${VERTEX_BASE}/${IMAGEN_MODEL}:predict?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          instances: [{ prompt: englishPrompt }],
-          parameters: { sampleCount: 1, aspectRatio: "1:1" },
-        }),
-      }
-    );
+    // Image models generate through generateContent and return the bytes as an
+    // inlineData part — the old Imagen `:predict` endpoint is retired.
+    const { parts, text } = await callGemini({
+      model: IMAGE_MODEL,
+      contents: [{ role: "user", parts: [{ text: englishPrompt }] }],
+      pinModel: true,
+    });
 
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error("[/api/tools/image] Imagen error:", errText);
-      if (res.status === 400 && errText.includes("safety")) {
-        const msg =
-          locale === "mg"
-            ? "Tsy afaka mamorona ity sary ity aho."
-            : locale === "en"
-            ? "I can't generate this image."
-            : "Je ne peux pas générer cette image.";
-        return Response.json({ error: "safety_block", text: msg });
-      }
-      return Response.json({ error: "image_generation_failed" }, { status: 200 });
-    }
-
-    const data = await res.json();
-    const prediction = data.predictions?.[0];
-    if (!prediction?.bytesBase64Encoded) {
-      return Response.json({ error: "image_generation_failed" }, { status: 200 });
+    const image = parts.find((p) => p.inlineData)?.inlineData;
+    if (!image?.data) {
+      console.error("[/api/tools/image] no image part returned:", text.slice(0, 200));
+      return Response.json({
+        error: "image_generation_failed",
+        text: UNAVAILABLE_MESSAGES[locale],
+      });
     }
 
     return Response.json({
-      imageBase64: prediction.bytesBase64Encoded,
-      mimeType: prediction.mimeType ?? "image/png",
+      imageBase64: image.data,
+      mimeType: image.mimeType || "image/png",
       prompt: englishPrompt,
     });
   } catch (err) {
     console.error("[/api/tools/image]", err);
-    return Response.json({ error: "image_generation_failed" }, { status: 200 });
+    return Response.json({
+      error: "image_generation_failed",
+      text: UNAVAILABLE_MESSAGES[locale],
+    });
   }
 }

@@ -8,7 +8,7 @@ export interface WebResult {
 }
 
 export async function runWebSearch(query: string, locale: Lang): Promise<WebResult> {
-  const detectedLang = detectLanguage(query);
+  const detectedLang = detectLanguage(query, locale);
   const systemPrompt = buildSystemPrompt(locale, detectedLang);
 
   const { text, groundingChunks } = await callGemini({
