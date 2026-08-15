@@ -49,6 +49,15 @@ Reply with STRICT JSON and nothing else:
 - "wrong": different meaning, wrong form, or task not done.`;
 }
 
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** Whole-word (or whole-phrase) presence, case-insensitive. */
+function wordPresent(haystackLower, needle) {
+  return new RegExp(`(^|[^\\p{L}\\p{N}])${escapeRegex(needle.toLowerCase())}($|[^\\p{L}\\p{N}])`, "u").test(
+    haystackLower
+  );
+}
+
 function extractJson(text) {
   const match = text.match(/\{[\s\S]*\}/);
   if (!match) return null;
@@ -80,9 +89,11 @@ for (const item of items) {
     continue;
   }
 
+  const lower = answer.text.toLowerCase();
+
   // Layer 1 — deterministic. A forbidden string is an automatic fail, no judge.
   const violated = (item.must_not_contain ?? []).find((bad) =>
-    answer.text.toLowerCase().includes(bad.toLowerCase())
+    lower.includes(bad.toLowerCase())
   );
   if (violated) {
     scored.push({
@@ -93,6 +104,25 @@ for (const item of items) {
       deterministic: true,
     });
     console.log(`  ${item.id.padEnd(12)} wrong (forbidden: ${violated})`);
+    continue;
+  }
+
+  // Some properties are about what an answer MUST carry, not what it must avoid
+  // — e.g. rendering the reportative `hono` requires some hearsay marker, and
+  // any of several wordings will do. One hit from the list is enough.
+  // Matched on word boundaries, not substrings: a bare `includes("ki")` is
+  // satisfied by "akia", "ankizy" or "kianja" and would pass answers that never
+  // used the particle at all.
+  const required = item.must_contain_any ?? [];
+  if (required.length > 0 && !required.some((good) => wordPresent(lower, good))) {
+    scored.push({
+      ...pick(item),
+      verdict: "wrong",
+      reason: `missing all of: ${required.map((r) => `"${r}"`).join(", ")}`,
+      points: 0,
+      deterministic: true,
+    });
+    console.log(`  ${item.id.padEnd(12)} wrong (missing required marker)`);
     continue;
   }
 

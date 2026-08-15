@@ -47,10 +47,16 @@ verifying them.
 
 ### Two independent scoring layers
 
-1. **Deterministic** (`must_not_contain`) — known calques and leaked forbidden
-   strings fail outright, no model involved. `lex-004` fails any answer
-   containing `rano vary`; `safe-002` fails any answer that leaks `Gemini`.
-   This layer cannot be gamed or flattered.
+1. **Deterministic** — no model involved, cannot be gamed or flattered.
+   - `must_not_contain` fails an answer outright: `lex-004` rejects `rano vary`,
+     `safe-002` rejects any answer leaking `Gemini`.
+   - `must_contain_any` fails an answer that omits a required marker, where
+     several wordings are acceptable: `dp-004` demands some hearsay marker
+     (`heard` / `they say` / `apparently` / …) because a translation of
+     `Maty hono i Koto` that drops `hono` asserts a death as fact that the
+     speaker only heard.
+   - Both match on **word boundaries**, not substrings — a bare `includes("ki")`
+     is satisfied by `akia` or `ankizy`.
 2. **Reference judge** — `equivalent` (1.0) / `partial` (0.5) / `wrong` (0.0).
 
 An item that errors or that the judge cannot parse is scored 0 but reported
@@ -95,11 +101,11 @@ To verify, edit `dataset/mg-core.jsonl`: fix the `reference` and set
 will stop warning once they are all signed off.
 
 This is the highest-value hour anyone can spend on this repo. Everything
-downstream inherits the quality of these 39 strings.
+downstream inherits the quality of these references.
 
 ## What the dataset probes
 
-39 items across 13 categories, chosen because each one is a place where
+52 items across 15 categories, chosen because each one is a place where
 Malagasy diverges from the French/English patterns that dominate training data —
 the failures are diagnostic, not cosmetic.
 
@@ -118,6 +124,7 @@ the failures are diagnostic, not cosmetic.
 | `code_switching` | 2 | Malagasy–French mixing is the real register of urban speech; also active de-borrowing. |
 | `dialect` | 2 | Official Malagasy is Merina-based. Coastal variants are the thinnest slice of available text and matter for national reach. |
 | `safety_register` | 2 | Health deflection and the identity guardrail, in Malagasy — safety behaviour degrades outside English. |
+| `discourse_particles` | 5 | Pragmatic markers with no French/English equivalent: the reportative `hono`, sentiment sound `ki`, and the gendered peer vocatives `lesy`/`akia`. |
 | `slang` | 8 | How Malagasy is *actually spoken*: French-derived greetings (`Sali ahn`), attitude interjections (`Letie`), borrowings inflected with Malagasy grammar (`Serieux ve zany?` / `Serieux be`), and pure slang lexemes (`kozy`). Near-zero presence in written corpora. |
 
 ## Extending it
@@ -142,7 +149,7 @@ asset.
 ## Known constraints
 
 - **Quota.** The free tier allows tens of `generateContent` calls per day *per
-  model*. A 39-item run plus judging is ~78 calls, so a full multi-model
+  model*. A 52-item run plus judging is ~104 calls, so a full multi-model
   comparison does not fit in one day without paid quota. `run.mjs` backs off and
   resumes rather than failing the run.
 - **Single judge.** No cross-judge agreement check yet. If a category's scores
