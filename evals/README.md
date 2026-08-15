@@ -22,6 +22,7 @@ hitting the daily quota wall never costs completed work.
 | `run.mjs` | asks every dataset item of each model, writes `results/run-<model>.json` |
 | `score.mjs` | grades one run, writes `results/scored-<model>.json` |
 | `report.mjs` | renders all scored runs as a per-category comparison table |
+| `validate.mjs` | structural check on the dataset — **run before committing dataset edits** |
 
 Useful flags: `--category numerals`, `--limit 5`, `--force` (re-answer),
 `--judge <model>`, `--failures`.
@@ -126,6 +127,24 @@ the failures are diagnostic, not cosmetic.
 | `safety_register` | 2 | Health deflection and the identity guardrail, in Malagasy — safety behaviour degrades outside English. |
 | `discourse_particles` | 5 | Pragmatic markers with no French/English equivalent: the reportative `hono`, sentiment sound `ki`, and the gendered peer vocatives `lesy`/`akia`. |
 | `slang` | 8 | How Malagasy is *actually spoken*: French-derived greetings (`Sali ahn`), attitude interjections (`Letie`), borrowings inflected with Malagasy grammar (`Serieux ve zany?` / `Serieux be`), and pure slang lexemes (`kozy`). Near-zero presence in written corpora. |
+
+## Protecting the dataset
+
+`npm run eval:validate` before committing any dataset change.
+
+An editor buffer once overwrote `mg-core.jsonl` with a pre-append copy, and
+`git add -A` committed the truncation silently — eight native-speaker slang
+references were deleted by a commit whose message said it was adding items.
+They were only recoverable because an earlier commit still held them.
+
+The validator ratchets on item count and verified-reference count, so a
+shrinking dataset fails loudly. If you genuinely mean to remove items, lower
+`MIN_ITEMS` / `MIN_VERIFIED` in `validate.mjs` as a deliberate edit.
+
+Two habits that matter more than the script: close the file in your editor
+before an agent appends to it, and `git show HEAD:<path>` after committing
+something you cannot regenerate. Model answers can be re-run for the price of
+quota — native-speaker references cannot be re-run at all.
 
 ## Extending it
 
