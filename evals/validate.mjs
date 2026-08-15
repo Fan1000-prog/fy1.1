@@ -12,8 +12,8 @@
 import { loadDataset } from "./lib/dataset.mjs";
 
 /** Ratchet: the dataset may grow, never silently shrink. */
-const MIN_ITEMS = 52;
-const MIN_VERIFIED = 12;
+const MIN_ITEMS = 54;
+const MIN_VERIFIED = 15;
 
 const REQUIRED = ["id", "category", "difficulty", "prompt", "reference", "notes"];
 const DIFFICULTIES = new Set(["easy", "medium", "hard"]);
