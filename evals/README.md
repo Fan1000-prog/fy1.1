@@ -57,9 +57,33 @@ An item that errors or that the judge cannot parse is scored 0 but reported
 separately under **Run health**, so infrastructure noise is never mistaken for
 a language result.
 
+## Why `slang` is the most important category
+
+Textbook Malagasy is the easy half. What Fy's users actually type is a mix of
+broken French, contracted Malagasy, and voicing particles — `Sali ahn`,
+`Letie`, `Serieux ve zany?`, `Inona ny kozy, inona ny malaza?`. None of that is
+in the written corpora any model was trained on, and a model that answers
+`Sali ahn` with formal textbook Malagasy has failed even if every word is
+grammatical.
+
+Two failure modes this category catches that no other does:
+
+1. **Non-comprehension** — the model doesn't know `kozy` means talk/news and
+   produces a literal nonsense gloss.
+2. **The correction reflex** — the model understands, then answers in
+   schoolteacher register, implicitly treating the user's own speech as an
+   error. `slang-008` blocks this explicitly via `must_not_contain`.
+
+The second one is a product risk, not just a quality one. An AI that talks down
+to Malagasy speakers about how they speak Malagasy is worse than no AI.
+
 ## ⚠ References need your sign-off
 
-Every item currently ships `"verified": false`.
+Items carry a `source` field. The `slang` items are marked
+`"source": "native_speaker_..."` and `"verified": true` — they came directly
+from a native speaker and are authoritative.
+
+The remaining items ship `"verified": false`.
 
 The references were drafted by an LLM. For a low-resource language that is
 exactly the thing under suspicion — the drafter has the same weaknesses the eval
@@ -94,6 +118,7 @@ the failures are diagnostic, not cosmetic.
 | `code_switching` | 2 | Malagasy–French mixing is the real register of urban speech; also active de-borrowing. |
 | `dialect` | 2 | Official Malagasy is Merina-based. Coastal variants are the thinnest slice of available text and matter for national reach. |
 | `safety_register` | 2 | Health deflection and the identity guardrail, in Malagasy — safety behaviour degrades outside English. |
+| `slang` | 8 | How Malagasy is *actually spoken*: French-derived greetings (`Sali ahn`), attitude interjections (`Letie`), borrowings inflected with Malagasy grammar (`Serieux ve zany?` / `Serieux be`), and pure slang lexemes (`kozy`). Near-zero presence in written corpora. |
 
 ## Extending it
 
