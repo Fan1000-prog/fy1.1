@@ -29,15 +29,32 @@ const dataset = loadDataset();
 const categories = [...new Set(dataset.map((i) => i.category))].sort();
 const verifiedCount = dataset.filter((i) => i.verified === true).length;
 
+/** Verdicts that reflect the model's Malagasy, as opposed to infrastructure noise. */
+const JUDGED = new Set(["equivalent", "partial", "wrong"]);
+
+/**
+ * Scores over JUDGED items only.
+ *
+ * An item the judge never reached (quota, unparseable output) says nothing
+ * about the candidate. Averaging it in as a zero silently reports a model as
+ * worse than measured — the eval would be lying in the direction of its own
+ * infrastructure failures. Coverage is reported separately instead.
+ */
 function pct(scored, filter = () => true) {
-  const rows = scored.filter(filter);
+  const rows = scored.filter((r) => filter(r) && JUDGED.has(r.verdict));
   if (rows.length === 0) return null;
   const earned = rows.reduce((sum, r) => sum + r.points, 0);
   return (earned / rows.length) * 100;
 }
 
+function coverage(scored, filter = () => true) {
+  const rows = scored.filter(filter);
+  const judged = rows.filter((r) => JUDGED.has(r.verdict)).length;
+  return { judged, total: rows.length };
+}
+
 const fmt = (v) => (v === null ? "  —  " : `${v.toFixed(0).padStart(3)}%`);
-const nameWidth = Math.max(...runs.map((r) => r.model.length), 18);
+const nameWidth = Math.max(...runs.map((r) => r.model.length), 18) + 8;
 
 console.log(`\nMalagasy eval — ${dataset.length} items, ${runs.length} model(s)`);
 console.log(`Judge: ${runs[0].judge}\n`);
@@ -50,19 +67,26 @@ console.log("─".repeat(header.join(" │ ").length));
 for (const category of categories) {
   const row = [category.padEnd(20)];
   for (const run of runs) {
-    row.push(fmt(pct(run.scored, (r) => r.category === category)).padStart(nameWidth));
+    const { judged, total } = coverage(run.scored, (r) => r.category === category);
+    const score = fmt(pct(run.scored, (r) => r.category === category));
+    // n/N makes a category scored on 1 of 4 items impossible to misread as solid.
+    row.push(`${score} (${judged}/${total})`.padStart(nameWidth));
   }
   console.log(row.join(" │ "));
 }
 
 console.log("─".repeat(header.join(" │ ").length));
 const overall = ["OVERALL".padEnd(20)];
-for (const run of runs) overall.push(fmt(pct(run.scored)).padStart(nameWidth));
+for (const run of runs) {
+  const { judged, total } = coverage(run.scored);
+  overall.push(`${fmt(pct(run.scored))} (${judged}/${total})`.padStart(nameWidth));
+}
 console.log(overall.join(" │ "));
 
 const hard = ["  hard items only".padEnd(20)];
 for (const run of runs) {
-  hard.push(fmt(pct(run.scored, (r) => r.difficulty === "hard")).padStart(nameWidth));
+  const { judged, total } = coverage(run.scored, (r) => r.difficulty === "hard");
+  hard.push(`${fmt(pct(run.scored, (r) => r.difficulty === "hard"))} (${judged}/${total})`.padStart(nameWidth));
 }
 console.log(hard.join(" │ "));
 

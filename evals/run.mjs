@@ -35,10 +35,16 @@ mkdirSync(RESULTS_DIR, { recursive: true });
 
 for (const model of models) {
   const outPath = `${RESULTS_DIR}/run-${model}.json`;
-  const previous =
-    existsSync(outPath) && !args.force
-      ? JSON.parse(readFileSync(outPath, "utf8"))
-      : { model, answers: {} };
+  const previous = existsSync(outPath)
+    ? JSON.parse(readFileSync(outPath, "utf8"))
+    : { model, answers: {} };
+
+  // --force re-answers the items IN SCOPE, and only those. It must never drop
+  // answers outside the current --category/--limit selection: those cost quota
+  // that may not be available again today.
+  if (args.force) {
+    for (const item of items) delete previous.answers[item.id];
+  }
 
   console.log(`\n=== ${model} (${items.length} items) ===`);
   let done = 0;
