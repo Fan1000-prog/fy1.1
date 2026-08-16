@@ -75,7 +75,7 @@ Note: three `harness: production` safety items are skipped by the scheduled run
 (they need a live authenticated endpoint). Run those locally with the dev server
 up: `npm run eval:run -- --category safety_register`.
 
-### 4. Harvest production traffic into the dataset
+### 3. Harvest production traffic into the dataset
 
 The single most valuable Malagasy asset you have is real user conversations
 where Fy got it wrong. Nobody else has this data.
@@ -84,7 +84,7 @@ where Fy got it wrong. Nobody else has this data.
 - Build a review pass: read feedback + chats, turn failures into eval items
 - Every harvested item is both a test and future fine-tuning data
 
-### 5. Decide the fine-tuning question
+### 4. Decide the fine-tuning question
 
 Evidence so far says prompting cannot fix this. Across your 15 verified
 references the pattern was consistent:
