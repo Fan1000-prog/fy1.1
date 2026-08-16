@@ -72,6 +72,13 @@ console.log(
 
 let workRemaining = false;
 
+/**
+ * Answer budgets are per model because free-tier quota is per model. The JUDGE
+ * budget is shared: every model is judged by the SAME judge model, so judging
+ * three candidates at BUDGET each would spend 3x the judge's daily allowance.
+ */
+let judgeBudgetLeft = BUDGET;
+
 for (const model of MODELS) {
   const answeredBefore = answeredCount(model);
 
@@ -86,14 +93,19 @@ for (const model of MODELS) {
   } else {
     // Answers are complete, so today's budget goes to judging instead.
     const judgedBefore = judgedCount(model);
-    if (judgedBefore < total) {
-      console.log(`── judging ${model} with ${JUDGE} (${judgedBefore}/${total} done)`);
+    if (judgedBefore < total && judgeBudgetLeft > 0) {
+      console.log(
+        `── judging ${model} with ${JUDGE} (${judgedBefore}/${total} done, ${judgeBudgetLeft} judge calls left today)`
+      );
       await run("evals/score.mjs", [
         "--run", `evals/results/run-${model}.json`,
         "--judge", JUDGE,
-        "--max-calls", String(BUDGET),
+        "--max-calls", String(judgeBudgetLeft),
         "--delay-ms", String(DELAY_MS),
       ]);
+      judgeBudgetLeft -= judgedCount(model) - judgedBefore;
+    } else if (judgedBefore < total) {
+      console.log(`── ${model}: judge budget spent for today, ${total - judgedBefore} left`);
     }
   }
 
