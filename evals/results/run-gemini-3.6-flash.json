@@ -1,0 +1,13 @@
+{
+  "model": "gemini-3.6-flash",
+  "answers": {
+    "num-001": {
+      "text": "Fito amby efapolo sy roanjato",
+      "harness": "raw"
+    },
+    "num-002": {
+      "text": "Valo ambin'ny sivifolo sy tsivin-jato sy arivo",
+      "harness": "raw"
+    }
+  }
+}

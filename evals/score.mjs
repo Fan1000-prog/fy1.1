@@ -157,14 +157,15 @@ for (const item of items) {
     break;
   }
   if (calls > 0 && delayMs) await sleep(delayMs);
-  calls++;
 
-  const { text, error } = await generate({
+  const { text, error, attempts } = await generate({
     apiKey,
     model: judgeModel,
     prompt: judgePrompt(item, answer.text),
     temperature: 0,
   });
+  // Budget in HTTP requests, not items — retries count against free-tier quota.
+  calls += attempts ?? 1;
 
   const parsed = error ? null : extractJson(text);
   const verdict = VERDICTS.has(parsed?.verdict) ? parsed.verdict : "unjudged";

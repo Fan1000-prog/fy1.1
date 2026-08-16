@@ -40,6 +40,8 @@ if (args.limit) items = items.slice(0, Number(args.limit));
  * tomorrow's slice picks up exactly where this one stopped.
  */
 const maxCalls = args["max-calls"] ? Number(args["max-calls"]) : Infinity;
+// Budget is spent in HTTP REQUESTS, not items: a retried item can cost up to
+// MAX_ATTEMPTS requests, and free-tier quota counts requests.
 /** Spacing between calls, to stay clear of per-minute limits too. */
 const delayMs = args["delay-ms"] ? Number(args["delay-ms"]) : 0;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -92,10 +94,9 @@ for (const model of models) {
       break;
     }
     if (calls > 0 && delayMs) await sleep(delayMs);
-    calls++;
     // Items marked harness:"production" go through Fy itself, so the system
     // prompt, tools and guardrails under test are the ones users actually hit.
-    const { text, error } =
+    const { text, error, attempts } =
       item.harness === "production"
         ? await generateViaProduct({
             endpoint,
@@ -103,12 +104,17 @@ for (const model of models) {
             locale: item.locale ?? "fr",
           })
         : await generate({ apiKey, model, prompt: item.prompt, system: SYSTEM });
+    // Spend the budget in HTTP REQUESTS, not items: a retried item costs up to
+    // MAX_ATTEMPTS requests and free-tier quota counts requests. Budgeting per
+    // item let one slice fire ~5x its intended number of requests.
+    calls += attempts ?? 1;
     previous.answers[item.id] = error
       ? { error, harness: item.harness ?? "raw" }
       : { text, harness: item.harness ?? "raw" };
     done++;
     console.log(
-      `  [${done}/${items.length}] ${item.id.padEnd(12)} ${error ? `ERROR ${error.slice(0, 60)}` : "ok"}`
+      `  [${done}/${items.length}] ${item.id.padEnd(12)} ${error ? `ERROR ${error.slice(0, 50)}` : "ok"}` +
+        (attempts > 1 ? ` (${attempts} requests)` : "")
     );
     // Write after every item so a quota wall never costs completed work.
     writeFileSync(outPath, JSON.stringify(previous, null, 2));

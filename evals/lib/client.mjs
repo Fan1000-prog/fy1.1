@@ -76,6 +76,11 @@ export async function generateViaProduct({ endpoint, prompt, locale = "fr" }) {
  *
  * Returns `{ text }` on success or `{ error }` on give-up — never throws, so one
  * bad item can't abandon a run that costs real quota to reproduce.
+ *
+ * Always reports `attempts`: the number of HTTP requests actually made. Free-tier
+ * quota is counted in requests, not items, so a caller budgeting by item can
+ * silently spend 5x its budget when retries kick in. Callers must decrement
+ * their budget by `attempts`, not by 1.
  */
 export async function generate({
   apiKey,
@@ -91,8 +96,10 @@ export async function generate({
   };
   if (system) body.system_instruction = { parts: [{ text: system }] };
 
+  let attempts = 0;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     let res;
+    attempts++;
     try {
       res = await fetch(`${HOST}/${model}:generateContent?key=${apiKey}`, {
         method: "POST",
@@ -100,7 +107,7 @@ export async function generate({
         body: JSON.stringify(body),
       });
     } catch (e) {
-      if (attempt === maxAttempts) return { error: `network: ${e.message}` };
+      if (attempt === maxAttempts) return { error: `network: ${e.message}`, attempts };
       await sleep(2000 * attempt);
       continue;
     }
@@ -112,16 +119,16 @@ export async function generate({
         .map((p) => p.text ?? "")
         .join("")
         .trim();
-      return text ? { text } : { error: "empty_response" };
+      return text ? { text, attempts } : { error: "empty_response", attempts };
     }
 
     const detail = await res.text();
     if (!RETRY_STATUSES.has(res.status) || attempt === maxAttempts) {
-      return { error: `http_${res.status}: ${detail.slice(0, 160)}` };
+      return { error: `http_${res.status}: ${detail.slice(0, 160)}`, attempts };
     }
     // Honour the server's own backoff hint when it gives one.
     const hinted = Number(detail.match(/retry in ([\d.]+)s/i)?.[1]);
     await sleep(Math.min(60_000, (hinted ? hinted * 1000 : 0) + 2000 * attempt));
   }
-  return { error: "exhausted_retries" };
+  return { error: "exhausted_retries", attempts };
 }
