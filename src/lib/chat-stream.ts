@@ -19,6 +19,8 @@ export interface ChatStreamRequest {
   locale: string;
   file?: { base64: string; mimeType: string } | null;
   signal?: AbortSignal;
+  /** Firebase ID token. /api/chat rejects unauthenticated requests. */
+  token: string;
 }
 
 /**
@@ -32,16 +34,29 @@ export async function* streamChat({
   locale,
   file,
   signal,
+  token,
 }: ChatStreamRequest): AsyncGenerator<StreamEvent> {
   const res = await fetch("/api/chat", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify({ messages, locale, ...(file ? { file } : {}) }),
     signal,
   });
 
   if (!res.ok || !res.body) {
-    yield { type: "error", message: `HTTP ${res.status}` };
+    // Quota is a normal, expected outcome — surface it as its own code so the
+    // UI can explain the limit instead of showing a generic failure.
+    let code = `HTTP ${res.status}`;
+    try {
+      const body = await res.json();
+      if (body?.error) code = body.error;
+    } catch {
+      /* non-JSON error body */
+    }
+    yield { type: "error", message: code };
     return;
   }
 

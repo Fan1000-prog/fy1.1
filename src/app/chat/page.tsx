@@ -407,10 +407,14 @@ function ChatInner() {
     };
 
     try {
+      const token = await user?.getIdToken();
+      if (!token) throw new Error("not_authenticated");
+
       for await (const event of streamChat({
         messages: historyPayload,
         locale,
         file: filePayload,
+        token,
       })) {
         switch (event.type) {
           case "text":
@@ -465,10 +469,13 @@ function ChatInner() {
       }
     } catch (err) {
       console.error("chat stream failed:", err);
+      const reason = err instanceof Error ? err.message : "";
       const failed: Message = {
         id: aiId,
         role: "assistant",
-        content: fallbackError(locale),
+        content: reason.startsWith("quota_exceeded")
+          ? quotaMessage(locale)
+          : fallbackError(locale),
         error: true,
         timestamp: new Date(),
       };
@@ -703,6 +710,14 @@ function ChatInner() {
 }
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
+
+function quotaMessage(locale: string): string {
+  if (locale === "mg")
+    return "Tratra ny fetran'ny fampiasana anio. Miverena rahampitso, na midira amin'ny kaonty raha mbola tsy nanao.";
+  if (locale === "en")
+    return "You've reached today's usage limit. Please come back tomorrow, or sign in for a higher limit.";
+  return "Vous avez atteint la limite d'utilisation du jour. Revenez demain, ou connectez-vous pour une limite plus élevée.";
+}
 
 function fallbackError(locale: string): string {
   if (locale === "mg") return "Nisy olana. Andamo indray.";

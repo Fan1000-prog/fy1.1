@@ -1,4 +1,5 @@
 import { CHAT_MODEL, CHAT_FALLBACKS } from "@/lib/models";
+import { requireGeminiApiKey } from "@/lib/api-key";
 
 const API_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
@@ -89,11 +90,7 @@ async function callOnce(
   };
 }
 
-function requireApiKey(): string {
-  const apiKey = process.env.VERTEX_API_KEY;
-  if (!apiKey) throw new Error("VERTEX_API_KEY not configured");
-  return apiKey;
-}
+const requireApiKey = requireGeminiApiKey;
 
 function buildBody({ contents, systemPrompt, tools }: GeminiOptions) {
   const body: Record<string, unknown> = { contents };
