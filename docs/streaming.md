@@ -59,8 +59,28 @@ Revisit only if server-side history buys something concrete.
 
 ## Constraint that shapes all of this
 
-Free-tier quota is **tens of `generateContent` calls per day, per model**. A
-tool-using turn costs 2–4 calls. That is fine for a demo and nowhere near
-enough for the testing traffic Fy already has, let alone eval runs
-(`npm run eval:run` alone is ~39 calls). Paid quota is the prerequisite for
-both production reliability and the research programme — not an optimisation.
+Free tier caps `generateContent` at **20 requests/day/model** (observed
+directly in the 429 body: `limit: 20, model: gemini-3.7-flash`). A tool-using
+turn costs 2–4 calls, so the free tier supports roughly **five to ten
+conversations per day, total, across all users**.
+
+Cost once billing is linked (paid-tier list prices, gemini-3.7-flash at
+$0.75/1M in, $3.75/1M out):
+
+| Workload | Calls | Approx cost |
+|---|---|---|
+| Plain chat turn (~1.5k in, ~300 out) | 1 | ~$0.002 |
+| Tool turn (orchestrator + tool + summary) | 2–4 | ~$0.006 |
+| Full eval run, 55 items | 55 | ~$0.05 |
+| Eval run + judging on a Pro model | 110 | ~$0.16 |
+| 1,000 chat turns/month, 30% using tools | ~1,600 | ~$3–4 |
+
+Google Search grounding is the one line item that can dominate: 5,000 free
+requests/month shared across Gemini 3.x, then **$14 per 1,000**. Image
+generation is also priced far above text. Both are worth watching before
+either becomes a default behaviour.
+
+The conclusion: **money is not the constraint, the free-tier request cap is.**
+Linking a billing account moves the project to Tier 1 ($10/10min spend limit,
+$250 billing cap) and the daily wall disappears at a realistic cost of a few
+dollars a month. Set a budget alert rather than relying on the cap.
