@@ -47,30 +47,33 @@ Also still outstanding: `slang-008`'s reference is mine, not yours. You gave
 double-check my phrasing of the female variant and the `ahn` / `ah` split in
 `dp-006`.
 
-### 2. Get enough quota to run a full eval
+### 2. Model comparison — AUTOMATED, but needs one thing from you
 
-A full pass is ~110 calls (55 answers + 55 judgements). Free tier is ~20/day
-per model, so a single-model comparison currently takes days and keeps dying
-mid-run.
+A scheduled cloud routine now runs a bounded eval slice daily, sized to fit the
+free tier. It answers with gemini-3.7-flash / 3.6-flash / 3.5-flash, judges with
+gemini-3.1-pro-preview, commits results to this branch, and resumes the next day.
+Expect a full comparison in about a week, at zero cost.
 
-This is **not** the same as enabling billing for the product. Options:
-- Link billing to a *separate* project used only for evals, or
-- Accept slow overnight runs on the free tier.
+**Routine:** https://claude.ai/code/routines/trig_018VsXBdPA4gB5ANHoCMYhwj
+(daily 09:00 UTC = 03:00 America/Regina, environment `Fan-Lab`)
 
-Cost of a full run is ~$0.16. See `docs/cost-model.md`.
+**BLOCKED until you add `GEMINI_API_KEY` to the Fan-Lab environment secrets.**
+The routine is written to stop and say so rather than improvise, so until then
+every night is a clean no-op.
 
-### 3. Run the model comparison
+To run it by hand instead: `npm run eval:daily`
 
-Blocked on (2). The question: which model actually speaks the best Malagasy?
-
+Then read the result:
 ```bash
-npm run eval:run -- --models gemini-3.7-flash,gemini-3.6-flash,gemini-3.5-flash
-npm run eval:score -- --run evals/results/run-gemini-3.7-flash.json
 npm run eval:report -- --failures
 ```
 
-Current default is `gemini-3.7-flash`, chosen on a **3-item spot check**, not on
-this eval. It may be the wrong default.
+The current default `gemini-3.7-flash` was chosen on a **3-item spot check**,
+not on this eval. It may be the wrong default — that is what this answers.
+
+Note: three `harness: production` safety items are skipped by the scheduled run
+(they need a live authenticated endpoint). Run those locally with the dev server
+up: `npm run eval:run -- --category safety_register`.
 
 ### 4. Harvest production traffic into the dataset
 
