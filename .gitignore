@@ -69,5 +69,6 @@ ui-debug.log
 *.pfx
 *.cer
 
-# eval outputs are regenerable and quota-specific
-evals/results/
+# Eval results ARE tracked. They were ignored as "regenerable", but at ~20 free
+# calls/day/model a full run takes days of quota to rebuild — and the scheduled
+# daily slice resumes from these files, so they have to survive between runs.
