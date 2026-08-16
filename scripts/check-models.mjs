@@ -35,9 +35,9 @@ function declaredModels() {
 }
 
 loadEnv();
-const apiKey = process.env.VERTEX_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY?.trim() || process.env.VERTEX_API_KEY?.trim();
 if (!apiKey) {
-  console.error("VERTEX_API_KEY not set");
+  console.error("GEMINI_API_KEY not set (also checked VERTEX_API_KEY)");
   process.exit(2);
 }
 

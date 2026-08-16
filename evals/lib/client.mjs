@@ -17,11 +17,17 @@ export function loadEnv() {
       /* not present */
     }
   }
-  if (!process.env.VERTEX_API_KEY) {
-    console.error("VERTEX_API_KEY not set (checked env, .env.local, .env)");
+  // GEMINI_API_KEY is canonical; VERTEX_API_KEY is the old name kept as a
+  // fallback so existing local .env files keep working. Both must be accepted
+  // or a deployment that sets only one of them fails for no good reason.
+  const key = process.env.GEMINI_API_KEY?.trim() || process.env.VERTEX_API_KEY?.trim();
+  if (!key) {
+    console.error(
+      "GEMINI_API_KEY not set (also checked VERTEX_API_KEY, in env, .env.local and .env)"
+    );
     process.exit(2);
   }
-  return process.env.VERTEX_API_KEY;
+  return key;
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
