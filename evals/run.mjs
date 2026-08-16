@@ -33,6 +33,33 @@ let items = loadDataset();
 if (args.category) items = items.filter((i) => i.category === args.category);
 if (args.limit) items = items.slice(0, Number(args.limit));
 
+/**
+ * --max-calls bounds how many model calls this invocation makes, PER MODEL.
+ * Free-tier quota is a per-model daily allowance, so a scheduled job can stay
+ * under it by running a bounded slice each day; the run file is resumable, so
+ * tomorrow's slice picks up exactly where this one stopped.
+ */
+const maxCalls = args["max-calls"] ? Number(args["max-calls"]) : Infinity;
+/** Spacing between calls, to stay clear of per-minute limits too. */
+const delayMs = args["delay-ms"] ? Number(args["delay-ms"]) : 0;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * harness:"production" items need Fy's own /api/chat, which requires a running
+ * server and a valid ID token. A headless scheduled run has neither, so they
+ * are skipped — loudly, never silently.
+ */
+const skipProduction = Boolean(args["skip-production"]);
+if (skipProduction) {
+  const skipped = items.filter((i) => i.harness === "production");
+  items = items.filter((i) => i.harness !== "production");
+  if (skipped.length) {
+    console.log(
+      `note: skipping ${skipped.length} production-harness item(s) — they need a live authenticated endpoint: ${skipped.map((i) => i.id).join(", ")}`
+    );
+  }
+}
+
 mkdirSync(RESULTS_DIR, { recursive: true });
 
 for (const model of models) {
@@ -50,12 +77,22 @@ for (const model of models) {
 
   console.log(`\n=== ${model} (${items.length} items) ===`);
   let done = 0;
+  let calls = 0;
 
   for (const item of items) {
     if (previous.answers[item.id] && !previous.answers[item.id].error) {
       done++;
       continue;
     }
+    if (calls >= maxCalls) {
+      const remaining = items.filter(
+        (i) => !previous.answers[i.id] || previous.answers[i.id].error
+      ).length;
+      console.log(`  budget reached (${maxCalls} calls) — ${remaining} item(s) still to do`);
+      break;
+    }
+    if (calls > 0 && delayMs) await sleep(delayMs);
+    calls++;
     // Items marked harness:"production" go through Fy itself, so the system
     // prompt, tools and guardrails under test are the ones users actually hit.
     const { text, error } =
@@ -78,5 +115,10 @@ for (const model of models) {
   }
 
   const failed = Object.values(previous.answers).filter((a) => a.error).length;
-  console.log(`  → ${outPath} (${failed} errored)`);
+  const outstanding = items.filter(
+    (i) => !previous.answers[i.id] || previous.answers[i.id].error
+  ).length;
+  console.log(
+    `  → ${outPath} | ${calls} call(s) used, ${failed} errored, ${outstanding} outstanding`
+  );
 }

@@ -18,7 +18,7 @@
  *
  * Usage: node evals/score.mjs --run evals/results/run-gemini-3.7-flash.json
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { loadEnv, generate } from "./lib/client.mjs";
 import { loadDataset, parseArgs } from "./lib/dataset.mjs";
 
@@ -79,9 +79,34 @@ const judgeModel = args.judge ?? JUDGE_MODEL_DEFAULT;
 const run = JSON.parse(readFileSync(args.run, "utf8"));
 const items = loadDataset().filter((i) => run.answers[i.id]);
 
+/** Bound judge calls per invocation so a scheduled slice stays under quota. */
+const maxCalls = args["max-calls"] ? Number(args["max-calls"]) : Infinity;
+const delayMs = args["delay-ms"] ? Number(args["delay-ms"]) : 0;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+const outPath = args.run.replace(/run-/, "scored-");
+
+// Resume: keep verdicts already earned, re-judge only what is missing or was
+// never given a real verdict (quota errors leave items "unjudged").
+const previous = existsSync(outPath)
+  ? JSON.parse(readFileSync(outPath, "utf8"))
+  : { model: run.model, judge: "", scored: [] };
+const settled = new Map(
+  (previous.scored ?? [])
+    .filter((r) => ["equivalent", "partial", "wrong"].includes(r.verdict))
+    .map((r) => [r.id, r])
+);
+
 const scored = [];
+let calls = 0;
 
 for (const item of items) {
+  const alreadySettled = settled.get(item.id);
+  if (alreadySettled) {
+    scored.push(alreadySettled);
+    continue;
+  }
+
   const answer = run.answers[item.id];
 
   if (answer.error) {
@@ -127,6 +152,13 @@ for (const item of items) {
   }
 
   // Layer 2 — reference-based judge.
+  if (calls >= maxCalls) {
+    console.log(`  budget reached (${maxCalls} judge calls) — stopping`);
+    break;
+  }
+  if (calls > 0 && delayMs) await sleep(delayMs);
+  calls++;
+
   const { text, error } = await generate({
     apiKey,
     model: judgeModel,
@@ -154,9 +186,30 @@ function pick(item) {
   };
 }
 
-const outPath = args.run.replace(/run-/, "scored-");
+// Carry forward EVERY settled verdict that this pass did not re-emit.
+//
+// Two ways they would otherwise be lost: breaking out of the loop on budget
+// leaves later items unvisited, and an item whose answer is missing from the
+// current run file is not in `items` at all. A verdict cost quota to obtain, so
+// it is never discarded just because the run file changed underneath it.
+const emitted = new Set(scored.map((r) => r.id));
+for (const [id, carried] of settled) {
+  if (!emitted.has(id)) scored.push(carried);
+}
+// Keep dataset order so reports read consistently run to run.
+const order = new Map(items.map((i, idx) => [i.id, idx]));
+scored.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+
 writeFileSync(
   outPath,
   JSON.stringify({ model: run.model, judge: judgeModel, scored }, null, 2)
 );
-console.log(`\n→ ${outPath}`);
+// Outstanding = items in THIS run still lacking a real verdict. Carried-forward
+// orphans must not count toward it or the number goes negative.
+const decided = new Set(
+  scored
+    .filter((r) => ["equivalent", "partial", "wrong"].includes(r.verdict))
+    .map((r) => r.id)
+);
+const outstanding = items.filter((i) => !decided.has(i.id)).length;
+console.log(`\n→ ${outPath} | ${calls} judge call(s) used, ${outstanding} outstanding`);
