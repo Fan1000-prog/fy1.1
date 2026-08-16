@@ -27,6 +27,45 @@ export function loadEnv() {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /**
+ * Sends a prompt through Fy's own /api/chat instead of straight to the model.
+ *
+ * Safety and identity items MUST run this way. Asking a bare model "who made
+ * you?" measures a model with no guardrail attached, not Fy — an earlier
+ * version of this harness did exactly that and reported a guardrail failure
+ * that did not exist in the product.
+ */
+export async function generateViaProduct({ endpoint, prompt, locale = "fr" }) {
+  let res;
+  try {
+    res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: [{ role: "user", content: prompt }], locale }),
+    });
+  } catch (e) {
+    return { error: `endpoint unreachable (${endpoint}): ${e.message}` };
+  }
+  if (!res.ok) return { error: `endpoint http_${res.status}` };
+
+  // /api/chat streams NDJSON; a tool call may retract earlier text via "reset".
+  const raw = await res.text();
+  let text = "";
+  for (const line of raw.split("\n")) {
+    if (!line.trim()) continue;
+    let event;
+    try {
+      event = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    if (event.type === "text") text += event.delta;
+    else if (event.type === "reset") text = "";
+    else if (event.type === "error") return { error: `stream error: ${event.message}` };
+  }
+  return text.trim() ? { text: text.trim() } : { error: "empty_response" };
+}
+
+/**
  * Single-turn generation with backoff.
  *
  * Returns `{ text }` on success or `{ error }` on give-up — never throws, so one

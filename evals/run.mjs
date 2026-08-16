@@ -11,10 +11,11 @@
  * tens of requests per day, so throwing away a completed run is expensive.
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { loadEnv, generate } from "./lib/client.mjs";
+import { loadEnv, generate, generateViaProduct } from "./lib/client.mjs";
 import { loadDataset, parseArgs } from "./lib/dataset.mjs";
 
 const RESULTS_DIR = "evals/results";
+const DEFAULT_ENDPOINT = "http://localhost:3111/api/chat";
 
 /**
  * Deliberately minimal — the eval measures the model's Malagasy, not Fy's
@@ -26,6 +27,7 @@ const SYSTEM =
 const args = parseArgs(process.argv.slice(2));
 const models = String(args.models ?? "gemini-3.7-flash").split(",").map((m) => m.trim());
 const apiKey = loadEnv();
+const endpoint = args.endpoint ?? DEFAULT_ENDPOINT;
 
 let items = loadDataset();
 if (args.category) items = items.filter((i) => i.category === args.category);
@@ -54,13 +56,19 @@ for (const model of models) {
       done++;
       continue;
     }
-    const { text, error } = await generate({
-      apiKey,
-      model,
-      prompt: item.prompt,
-      system: SYSTEM,
-    });
-    previous.answers[item.id] = error ? { error } : { text };
+    // Items marked harness:"production" go through Fy itself, so the system
+    // prompt, tools and guardrails under test are the ones users actually hit.
+    const { text, error } =
+      item.harness === "production"
+        ? await generateViaProduct({
+            endpoint,
+            prompt: item.prompt,
+            locale: item.locale ?? "fr",
+          })
+        : await generate({ apiKey, model, prompt: item.prompt, system: SYSTEM });
+    previous.answers[item.id] = error
+      ? { error, harness: item.harness ?? "raw" }
+      : { text, harness: item.harness ?? "raw" };
     done++;
     console.log(
       `  [${done}/${items.length}] ${item.id.padEnd(12)} ${error ? `ERROR ${error.slice(0, 60)}` : "ok"}`
