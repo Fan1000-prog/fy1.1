@@ -57,9 +57,17 @@ Expect a full comparison in about a week, at zero cost.
 **Routine:** https://claude.ai/code/routines/trig_018VsXBdPA4gB5ANHoCMYhwj
 (daily 09:00 UTC = 03:00 America/Regina, environment `Fan-Lab`)
 
-**BLOCKED until you add `GEMINI_API_KEY` to the Fan-Lab environment secrets.**
-The routine is written to stop and say so rather than improvise, so until then
-every night is a clean no-op.
+`GEMINI_API_KEY` is set in the Fan-Lab environment and **verified working** —
+the first test run authenticated and made real calls.
+
+**BLOCKED on GitHub write access.** The run answered items successfully but
+could not push: `403 Resource not accessible by integration`. The Claude Code
+GitHub App lacks `contents: write` on `Fan1000-prog/fy1.1`. The cloud container
+is ephemeral, so an unpushed result file is a lost day of quota.
+
+Fix: GitHub → Settings → Applications → Claude Code → Repository access →
+grant `Fan1000-prog/fy1.1` with **Contents: Read and write**. Until then the
+routine burns quota nightly and saves nothing.
 
 To run it by hand instead: `npm run eval:daily`
 
