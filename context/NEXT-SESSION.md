@@ -60,14 +60,23 @@ Expect a full comparison in about a week, at zero cost.
 `GEMINI_API_KEY` is set in the Fan-Lab environment and **verified working** —
 the first test run authenticated and made real calls.
 
-**BLOCKED on GitHub write access.** The run answered items successfully but
-could not push: `403 Resource not accessible by integration`. The Claude Code
-GitHub App lacks `contents: write` on `Fan1000-prog/fy1.1`. The cloud container
-is ephemeral, so an unpushed result file is a lost day of quota.
+**BLOCKED on GitHub write access — still unresolved as of 2026-08-23, 8 runs
+in.** Checked all 8 daily sessions (8/16–8/23): every one validates, spends
+~50-57 real Gemini calls, commits locally, then fails the push with the same
+403. Zero result files have landed on the remote branch since the very first
+(manual) push. **The routine has been pure quota waste for a week** — nothing
+carries forward, so "resume tomorrow" has had nothing to resume from.
 
-Fix: GitHub → Settings → Applications → Claude Code → Repository access →
-grant `Fan1000-prog/fy1.1` with **Contents: Read and write**. Until then the
-routine burns quota nightly and saves nothing.
+**Routine is now PAUSED** (`trig_018VsXBdPA4gB5ANHoCMYhwj`, disabled
+2026-08-23) so it stops burning quota nightly. Re-enable once access is fixed.
+
+Fix: install the Claude GitHub App directly at
+https://github.com/apps/claude/installations/select_target, targeting the
+**Fan1000-prog** account (not any org), and grant `fy1.1` **Contents: Read
+and write**. Note: the claude.ai "reconnect GitHub" connector flow tries to
+auto-link every org your GitHub login can see, including ones you don't own
+(hit a `vendasta` "you need to be an owner" error there) — that's a red
+herring, unrelated to `Fan1000-prog`. Use the direct app-install page instead.
 
 To run it by hand instead: `npm run eval:daily`
 
