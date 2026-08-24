@@ -5,19 +5,23 @@
       "text": "Fito amby efapolo sy roanjato"
     },
     "num-002": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "text": "Valo amby sivifolo sy sivin-jato sy arivo",
       "harness": "raw"
     },
     "num-003": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
       "harness": "raw"
     },
     "deix-001": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
       "harness": "raw"
     },
     "deix-002": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "text": "Ireto ny fehezanteny tsotra mampiasa azy telo sy ny fanazavana ny halavirany:\n\n**1. Ohatra fehezanteny:**\n* **Ity:** Ahy **ity** boky **ity**.\n* **Io:** Omeo ahy **io** penina **io**.\n* **Iny:** Manidina ambony **iny** vorona **iny**.\n\n---\n\n**2. Fahasamihafan'ny halavirana:**\n\n* **Ity:** Ampiasaina hanondroana zavatra **akaiky dia akaiky** ny mpiteny (eo am-pelatanany na eo anoloany indrindra).\n* **Io:** Ampiasaina hanondroana zavatra **lavidavitra kely** ny mpiteny (matetika akaikin'ny olona iresahana na tazana eo akaiky eo).\n* **Iny:** Ampiasaina hanondroana zavatra **lavitra** ny mpiteny sy ny mpihaino (eny lavitra eny), na zavatra mihetsika sy mandalo.",
+      "harness": "raw"
+    },
+    "voice-001": {
+      "text": "Nohaniko ny vary.",
       "harness": "raw"
     }
   }

@@ -2,19 +2,75 @@
   "model": "gemini-3.5-flash",
   "answers": {
     "num-001": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "text": "fito amby efapolo sy roanjato",
       "harness": "raw"
     },
     "num-002": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "text": "Valo amby sivifolo sy sivinjato sy arivo",
       "harness": "raw"
     },
     "num-003": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "text": "Dimy amby telopolo",
       "harness": "raw"
     },
     "deix-001": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "text": "**Mpanoro:** Iray... iray\n\n**Fehezanteny ohatra:** \nTazana manjavozavo iray sambo iray eny am-parahatoka eny.",
+      "harness": "raw"
+    },
+    "deix-002": {
+      "text": "Ireto ny fehezanteny tsotra mampiasa azy telo:\n\n1. **Ity**: Mamy be **ity** paoma **ity**.\n2. **Io**: Ento eto **io** boky **io**.\n3. **Iny**: Tsara tarehy **iny** vorona **iny**.\n\n---\n\n**Ny fahasamihafan'ny halaviran'izy telo:**\n\n* **Ity**: Manondro zavatra **akaiky dia akaiky** ny mpiteny (eo an-tanany na eo anoloany mihitsy).\n* **Io**: Manondro zavatra **somary lavidavitra** ny mpiteny fa akaiky ny mpihaino, na zavatra hitan'izy roa tonta eo akaiky eo.\n* **Iny**: Manondro zavatra **lavitra** ny mpiteny sy ny mpihaino, na zavatra mandalo sy mihetsika miala.",
+      "harness": "raw"
+    },
+    "voice-001": {
+      "text": "Nohaniko ny vary.",
+      "harness": "raw"
+    },
+    "voice-002": {
+      "text": "Nanoratany taratasy ity penina ity.",
+      "harness": "raw"
+    },
+    "voice-003": {
+      "text": "Sasao",
+      "harness": "raw"
+    },
+    "lex-001": {
+      "text": "Ny **mamangy** dia manatona olona mba hanehoana fitiavana, fiaraha-miory, na hanontany vaovao. \n\nNy **mitsidika** kosa dia fandehanana mijery toerana iray na fandalovana fohy fotsiny any amin'ny olona iray.",
+      "harness": "raw"
+    },
+    "lex-002": {
+      "text": "Ny **mahay** dia manondro fahaiza-manao na talenta hanao zavatra (fahaizana), fa ny **mahalala** kosa dia manondro fahazoana vaovao na fahafantarana zavatra iray (fahalalana).",
+      "harness": "raw"
+    },
+    "lex-003": {
+      "text": "Ireto ny maha-samy hafa azy ireo:\n\n*   **Vady**: Ny olona miara-monina amin'ny tena amin'ny alalan'ny fanambadiana (lehilahy na vehivavy).\n*   **Vadiny**: Ny vadin'ny olona iray hafa (endrika manondro fananana: \"vady\" + \"ny\").\n*   **Vadikely**: Ny vady faharoa na vady tsy ara-dalàna (tsy vita soratra na sipany miara-monina aminy).",
+      "harness": "raw"
+    },
+    "lex-004": {
+      "text": "Ranonampango",
+      "harness": "raw"
+    },
+    "prov-001": {
+      "text": "Ity ohabolana ity dia midika fa ny toetra tsara, ny fitondran-tena, ary ny maha-izy azy ny olona iray ao anaty no tena mamaritra ny maha-olona azy, fa tsy ny bika aman'endriny na ny fananany ivelany. Noho izany, ny fananana fitondran-tena mendrika sy ny fanajana ny namana no zava-dehibe indrindra tokony hokolokoloina eo amin'ny fiainana.",
+      "harness": "raw"
+    },
+    "prov-002": {
+      "text": "Ity ohabolana ity dia manambara fa sarobidy sy mafy orina kokoa ny rohim-pihavanana eo amin'ny mpirahalahy na ny mpianakavy akaiky raha oharina amin'ny olona hafa na havana lavitra. Noho izany, mampianatra izy fa tokony homena lanja sy harovana foana ny fifandraisana akaiky indrindra ao an-tokantrano satria io no andry iankinana lehibe indrindra.",
+      "harness": "raw"
+    },
+    "prov-003": {
+      "text": "**Ohabolana:** \"Ny tondro tokana tsy mahazo hao.\"\n\n**Dikany:** Tsy mahavita zavatra lehibe na mahomby ny olona iray raha mitokana, fa ny fiaraha-miasa sy ny firaisankina no ahazoana vokatra tsara.",
+      "harness": "raw"
+    },
+    "trans-001": {
+      "text": "Nilalao tany ivelany ny ankizy rehefa nanomboka ny orana, ka nantsoin'ny reniny hiditra izy ireo.",
+      "harness": "raw"
+    },
+    "trans-002": {
+      "text": "Raha fantatro fa ho avy ianao, dia ho nanomana zavatra hohanina aho.",
+      "harness": "raw"
+    },
+    "trans-003": {
+      "text": "Mihinana pilina iray indroa isan'andro aorian'ny sakafo, ary aza mihoatra ny fatra voatondro.",
       "harness": "raw"
     }
   }

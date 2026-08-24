@@ -10,19 +10,75 @@
       "harness": "raw"
     },
     "num-003": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "text": "dimy amby telopolo",
       "harness": "raw"
     },
     "deix-001": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "text": "**Teny:** Iry\n\n**Fehezanteny ohatra:** Jereo iry vorona manidina lavitra be eny amin'ny rahona iry.",
       "harness": "raw"
     },
     "deix-002": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "text": "Ny fehezanteny tsotra ampiasan'izy telo:\n\n1. **Ity:** Tsara **ity** boky **ity**.\n2. **Io:** Alao **io** penina **io**.\n3. **Iny:** Jereo **iny** vorona **iny**.\n\n---\n\n**Fahasamihafan'ny halaviran'izy telo:**\n\n* **Ity:** Ampiasaina rehefa **akaiky indrindra ny mpiteny** ilay zavatra (eo an-tanany na eo anilany indrindra).\n* **Io:** Ampiasaina rehefa **antony halavirana** ilay zavatra (akaiky ny mpihaino kokoa, na tsy dia lavitra loatra ny mpiteny).\n* **Iny:** Ampiasaina rehefa **lavitra ny mpiteny sy ny mpihaino** ilay zavatra (hitan'ny maso fa lavitra, na zavatra mandalo/mihamafy ny halavirany).",
       "harness": "raw"
     },
     "voice-001": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "text": "Nohaniko ny vary.",
+      "harness": "raw"
+    },
+    "voice-002": {
+      "text": "Nanoratany taratasy ity penina ity.",
+      "harness": "raw"
+    },
+    "voice-003": {
+      "text": "Sasao",
+      "harness": "raw"
+    },
+    "lex-001": {
+      "text": "Ny **\"mamangy\"** dia fitsidihana olona tratran'ny fahoriana, loza, na aretina (fanehoana fiaraha-miory na fanohana), fa ny **\"mitsidika\"** dia fitsidihana tsotra amin'ny fotoana mahazatra (ho an'ny fihavanana, fialam-boly, na fizahan-tany).",
+      "harness": "raw"
+    },
+    "lex-002": {
+      "text": "Ny **\"mahalala\"** dia momba ny fananana fahalalana na vaovao an-tsaina momba ny zavatra iray (teoria), fa ny **\"mahay\"** dia ny fahaizana mampihar izany na ny fananana fahaiza-manao amin'ny fanaovana zavatra iray (fampiharana).",
+      "harness": "raw"
+    },
+    "lex-003": {
+      "text": "Ity ny maha-samy hafa azy ireo:\n\n* **Vady:** Teny ankapobeny ilazana ny hoavam-piainana (lehilahy na vehivavy) ao anaty fanambadiana.\n* **Vadiny:** Teny milaza fananana, midika hoe \"ny vadin'olona iray\" (vady + -ny).\n* **Vadikely:** Vady faharoa na vehivavy iarahana ivelan'ny fanambadiana ara-dalàna (ampafarafy).",
+      "harness": "raw"
+    },
+    "lex-004": {
+      "text": "Ranovola",
+      "harness": "raw"
+    },
+    "prov-001": {
+      "text": "Ity ohabolana ity dia midika fa ny tena maha-olona ny olona iray dia miankina amin'ny toetrany sy ny fitondran-tenany, fa tsy amin'ny bika aman-endriny na ny fananany. Mampianatra izany fa ny hatsaran-toetra sy ny fahendrena ao anaty no tena manome vidy ny olombelona eo amin'ny fiaraha-monina.",
+      "harness": "raw"
+    },
+    "prov-002": {
+      "text": "Ity ohabolana ity dia maneho fa lehibe sy sarobidy kokoa ny fifamatorana eo amin'ny mpirahalahy mpiray tampo noho ny amin'ny havana hafa. Mampianatra izany fa ny rahalahy no toky sy mpanohana voalohany azo ianteherana indrindra amin'ny fotoam-pahasarotana.",
+      "harness": "raw"
+    },
+    "prov-003": {
+      "text": "**Ohabolana:** \n« Tondro tokana tsy mahazo hao. »\n\n**Dikany:** \nTsy mahavita zavatra na tsy hahomby ny olona iray raha manao izany mitokana, fa mila ny fiaraha-miasa sy ny fifanampiana amin'ny hafa mba hahatratarana ny tanjona.",
+      "harness": "raw"
+    },
+    "trans-001": {
+      "text": "Nilalao tany ivelany ny ankizy rehefa nanomboka avy ny orana, ka nantsoin'ny reniny hiditra izy ireo.",
+      "harness": "raw"
+    },
+    "trans-002": {
+      "text": "Raha fantatro fa ho avy ianao, dia ho nikarakara zavatra hohanina aho.",
+      "harness": "raw"
+    },
+    "trans-003": {
+      "text": "Mihinàna pilina iray indroa isan'andro aorian'ny sakafo, ary aza mihoatra ny fatra voatondro.",
+      "harness": "raw"
+    },
+    "trans-004": {
+      "text": "Nothing but the truth sets free.",
+      "harness": "raw"
+    },
+    "trans-005": {
+      "text": "Nandà ny fampindramam-bola ny banky satria tsy nahomby ny voka-pambolena roa taona nifandimby.",
       "harness": "raw"
     }
   }
