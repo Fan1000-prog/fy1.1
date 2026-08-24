@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { auth } from "@/lib/firebase/client";
 
 export type RecorderState = "idle" | "recording" | "transcribing" | "done";
 
@@ -70,7 +71,12 @@ export function useVoiceRecorder(): UseVoiceRecorderResult {
       try {
         const form = new FormData();
         form.append("audio", blob, "recording.webm");
-        const res = await fetch("/api/tools/transcribe", { method: "POST", body: form });
+        const token = await auth.currentUser?.getIdToken();
+        const res = await fetch("/api/tools/transcribe", {
+          method: "POST",
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          body: form,
+        });
         const data = await res.json();
         if (data.text) {
           setTranscript(data.text);

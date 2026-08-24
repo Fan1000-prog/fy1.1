@@ -6,7 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { AnimatePresence } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
-import { detectIntent } from "@/lib/intent";
+import { streamChat, type ToolArtifacts } from "@/lib/chat-stream";
 import { useVoiceRecorder } from "@/hooks/useVoiceRecorder";
 import type { Message, Source, VideoMeta, AttachedFile } from "@/types/message";
 import { LangSwitcher } from "@/components/lang-switcher";
@@ -65,6 +65,23 @@ const TOOL_STATUS_KEYS = {
   youtube: "chat_analyzing_video",
   image: "chat_generating_image",
 } as const;
+
+/** Server tool names → the UI badge/status vocabulary the client already uses. */
+const TOOL_EVENT_LABELS: Record<string, string> = {
+  web_search: "web",
+  youtube_summarize: "youtube",
+  generate_image: "image",
+};
+
+/**
+ * A tool pill steers the model instead of hard-routing around it. Phrased as
+ * user intent so the model still declines when the tool genuinely doesn't fit.
+ */
+const TOOL_HINTS: Record<string, string> = {
+  web: "[Use web search for this.] ",
+  youtube: "[This is about a YouTube video — summarize it.] ",
+  image: "[I confirm I want you to generate an image.] ",
+};
 
 const ACCEPTED_FILE_TYPES = ["application/pdf", "image/jpeg", "image/jpg", "image/png", "image/webp"];
 const MAX_FILE_BYTES = 20 * 1024 * 1024;
@@ -303,15 +320,15 @@ function ChatInner() {
     const text = input.trim();
     if ((!text && !attachedFile) || isTyping) return;
 
-    const intent = activeTool && activeTool !== "voice"
-      ? activeTool
-      : text ? detectIntent(text) : "chat";
+    // A selected pill is a hint, not a route: the model still decides whether the
+    // tool actually fits the message, and can chain others alongside it.
+    const pill = activeTool && activeTool !== "voice" ? activeTool : null;
 
     const userMsg: Message = {
       id: Date.now().toString(),
       role: "user",
       content: text,
-      tool: intent !== "chat" ? intent : undefined,
+      tool: pill ?? undefined,
       file: attachedFile
         ? { name: attachedFile.name, size: attachedFile.size, mimeType: attachedFile.mimeType }
         : undefined,
@@ -354,83 +371,90 @@ function ChatInner() {
     setFileError(null);
     if (textareaRef.current) textareaRef.current.style.height = "auto";
     setIsTyping(true);
-    setActiveToolLabel(intent !== "chat" ? intent : null);
+    setActiveToolLabel(null);
+
+    const history = [...messages.filter((m) => m.id !== "welcome"), userMsg];
+    const historyPayload = history.map((m) => ({ role: m.role, content: m.content }));
+    if (pill) {
+      historyPayload[historyPayload.length - 1] = {
+        role: "user",
+        content: `${TOOL_HINTS[pill] ?? ""}${text}`,
+      };
+    }
+
+    const aiId = (Date.now() + 1).toString();
+    let streamed = "";
+    let artifacts: ToolArtifacts = {};
+    let usedTool: string | null = null;
+    let started = false;
+
+    // Creates the assistant bubble on the first token, then patches it in place
+    // as more arrive, so the user reads the answer as it is generated.
+    const paint = () => {
+      const patch: Partial<Message> = {
+        content: streamed,
+        tool: usedTool ?? undefined,
+        sources: artifacts.sources,
+        video: artifacts.video ?? undefined,
+        image: artifacts.image,
+      };
+      setMessages((prev) =>
+        started
+          ? prev.map((m) => (m.id === aiId ? { ...m, ...patch } : m))
+          : [...prev, { id: aiId, role: "assistant", timestamp: new Date(), content: "", ...patch }],
+      );
+      started = true;
+    };
 
     try {
-      const history = [...messages.filter((m) => m.id !== "welcome"), userMsg];
-      const historyPayload = history.map((m) => ({ role: m.role, content: m.content }));
-      let aiMsg: Message;
+      const token = await user?.getIdToken();
+      if (!token) throw new Error("not_authenticated");
 
-      if (intent === "web") {
-        const res = await fetch("/api/tools/web", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text, locale, history: historyPayload }),
-        });
-        const data = await res.json();
-        aiMsg = {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: data.text || fallbackError(locale),
-          tool: "web",
-          sources: data.sources,
-          error: !!data.error && !data.text,
-          timestamp: new Date(),
-        };
-      } else if (intent === "youtube") {
-        const res = await fetch("/api/tools/youtube", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text, locale }),
-        });
-        const data = await res.json();
-        aiMsg = {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: data.text || fallbackError(locale),
-          tool: "youtube",
-          video: data.video,
-          error: !!data.error && !data.text,
-          timestamp: new Date(),
-        };
-      } else if (intent === "image") {
-        const res = await fetch("/api/tools/image", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: text, locale }),
-        });
-        const data = await res.json();
-        aiMsg = {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: data.text || (data.imageBase64 ? "" : fallbackError(locale)),
-          tool: "image",
-          image: data.imageBase64
-            ? { base64: data.imageBase64, mimeType: data.mimeType ?? "image/png" }
-            : undefined,
-          error: !!data.error && !data.imageBase64,
-          timestamp: new Date(),
-        };
-      } else {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            messages: historyPayload,
-            locale,
-            ...(filePayload ? { file: filePayload } : {}),
-          }),
-        });
-        const data = await res.json();
-        aiMsg = {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: data.text || fallbackError(locale),
-          timestamp: new Date(),
-        };
+      for await (const event of streamChat({
+        messages: historyPayload,
+        locale,
+        file: filePayload,
+        token,
+      })) {
+        switch (event.type) {
+          case "text":
+            streamed += event.delta;
+            paint();
+            break;
+          case "tool":
+            usedTool = TOOL_EVENT_LABELS[event.name] ?? null;
+            setActiveToolLabel(usedTool);
+            break;
+          case "artifacts":
+            artifacts = { ...artifacts, ...event.artifacts };
+            if (started) paint();
+            break;
+          case "reset":
+            // Text so far was preamble to a tool call, not the answer.
+            streamed = "";
+            if (started) paint();
+            break;
+          case "error":
+            throw new Error(event.message);
+          case "done":
+            break;
+        }
       }
 
-      setMessages((prev) => [...prev, aiMsg]);
+      if (!streamed && !artifacts.image) throw new Error("empty_response");
+
+      const aiMsg: Message = {
+        id: aiId,
+        role: "assistant",
+        content: streamed,
+        tool: usedTool ?? undefined,
+        sources: artifacts.sources,
+        video: artifacts.video ?? undefined,
+        image: artifacts.image,
+        timestamp: new Date(),
+      };
+      paint();
+
       if (uid && chatId) {
         saveMessage(uid, chatId, toChatMessage(aiMsg)).catch((e) =>
           console.error("saveMessage(ai) failed:", e),
@@ -443,17 +467,21 @@ function ChatInner() {
           ),
         );
       }
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content: fallbackError(locale),
-          error: true,
-          timestamp: new Date(),
-        },
-      ]);
+    } catch (err) {
+      console.error("chat stream failed:", err);
+      const reason = err instanceof Error ? err.message : "";
+      const failed: Message = {
+        id: aiId,
+        role: "assistant",
+        content: reason.startsWith("quota_exceeded")
+          ? quotaMessage(locale)
+          : fallbackError(locale),
+        error: true,
+        timestamp: new Date(),
+      };
+      setMessages((prev) =>
+        started ? prev.map((m) => (m.id === aiId ? failed : m)) : [...prev, failed],
+      );
     } finally {
       setIsTyping(false);
       setActiveToolLabel(null);
@@ -682,6 +710,14 @@ function ChatInner() {
 }
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
+
+function quotaMessage(locale: string): string {
+  if (locale === "mg")
+    return "Tratra ny fetran'ny fampiasana anio. Miverena rahampitso, na midira amin'ny kaonty raha mbola tsy nanao.";
+  if (locale === "en")
+    return "You've reached today's usage limit. Please come back tomorrow, or sign in for a higher limit.";
+  return "Vous avez atteint la limite d'utilisation du jour. Revenez demain, ou connectez-vous pour une limite plus élevée.";
+}
 
 function fallbackError(locale: string): string {
   if (locale === "mg") return "Nisy olana. Andamo indray.";

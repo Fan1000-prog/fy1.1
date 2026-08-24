@@ -38,6 +38,20 @@ export const translations = {
     cta_title: "Prêt à commencer ?",
     cta_subtitle: "Rejoignez la communauté fy et explorez l'IA sans limites.",
     cta_button: "Créer un compte",
+    // How it works
+    how_title: "Comment ça marche",
+    how_subtitle: "Trois étapes, c'est tout.",
+    how_step1_title: "Posez votre question",
+    how_step1_desc: "Écrivez ou parlez — en français, malgache ou anglais.",
+    how_step2_title: "fy utilise ses outils",
+    how_step2_desc: "Recherche web, vidéos, voix, images — fy choisit ce qu'il faut.",
+    how_step3_title: "Vous obtenez la réponse",
+    how_step3_desc: "Claire, sourcée, dans votre langue.",
+    // Story
+    story_eyebrow: "Notre histoire",
+    story_title: "Fait à Madagascar, pour Madagascar.",
+    story_body:
+      "Des rues d'Antananarivo aux Hautes Terres, fy est né ici. Une IA qui comprend notre langue, notre contexte et nos ambitions — pour que chaque Malagasy ait un assistant à la hauteur de ses rêves.",
     // Partners
     partners_eyebrow: "Propulsé par les meilleurs.",
     partners_title: "Construit avec des outils de confiance.",
@@ -139,6 +153,20 @@ export const translations = {
     cta_title: "Vonona hanomboka?",
     cta_subtitle: "Midira ao anatin'ny fiarahamonina fy ary manomboa mampiasa IA tsy misy fetra.",
     cta_button: "Mamorona kaonty",
+    // How it works
+    how_title: "Ahoana no fiasany",
+    how_subtitle: "Dingana telo, fa izay.",
+    how_step1_title: "Apetraho ny fanontanianao",
+    how_step1_desc: "Soraty na lazao — amin'ny teny frantsay, malagasy na anglisy.",
+    how_step2_title: "Mampiasa ny fitaovany i fy",
+    how_step2_desc: "Fikarohana web, horonantsary, feo, sary — i fy no misafidy izay ilaina.",
+    how_step3_title: "Mahazo ny valiny ianao",
+    how_step3_desc: "Mazava, misy loharano, amin'ny teninao.",
+    // Story
+    story_eyebrow: "Ny tantaranay",
+    story_title: "Vita Malagasy, ho an'ny Malagasy.",
+    story_body:
+      "Avy amin'ny arabe eto Antananarivo ka hatrany amin'ny Afovoan-tany, teraka eto i fy. Intelligence artificielle mahatakatra ny fitenintsika, ny tontolontsika ary ny nofintsika — mba hananan'ny Malagasy tsirairay mpanampy mendrika ny nofiny.",
     // Partners
     partners_eyebrow: "Atosiky ny tsara indrindra.",
     partners_title: "Naorina amin'ny fitaovana azo itokisana.",
@@ -240,6 +268,20 @@ export const translations = {
     cta_title: "Ready to start?",
     cta_subtitle: "Join the fy community and explore AI without limits.",
     cta_button: "Create account",
+    // How it works
+    how_title: "How it works",
+    how_subtitle: "Three steps, that's it.",
+    how_step1_title: "Ask your question",
+    how_step1_desc: "Type or speak — in French, Malagasy or English.",
+    how_step2_title: "fy uses its tools",
+    how_step2_desc: "Web, video, voice, images — fy picks the right one.",
+    how_step3_title: "You get the answer",
+    how_step3_desc: "Clear, sourced, in your language.",
+    // Story
+    story_eyebrow: "Our story",
+    story_title: "Made in Madagascar, for Madagascar.",
+    story_body:
+      "From the streets of Antananarivo to the highlands, fy was born here. An AI that understands our language, our context and our ambition — so every Malagasy has an assistant worthy of their dreams.",
     // Partners
     partners_eyebrow: "Powered by the best.",
     partners_title: "Built with trusted tools.",

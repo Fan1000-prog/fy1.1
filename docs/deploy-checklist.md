@@ -23,8 +23,14 @@ Client SDK (must be `NEXT_PUBLIC_*` so they reach the browser):
 
 Server-side (used by `/api/*` routes; never prefix with `NEXT_PUBLIC_`):
 
-- [ ] `VERTEX_API_KEY`
-- [ ] Any other server keys you've added since (search `process.env.` under `src/app/api/`)
+- [ ] `GEMINI_API_KEY` — Gemini Developer API key (`VERTEX_API_KEY` still works as a fallback)
+- [ ] `FIREBASE_SERVICE_ACCOUNT` — **required**. Service-account JSON on one line.
+      Without it every `/api/chat` request returns 503, because the server can
+      neither verify ID tokens nor meter usage.
+- [ ] `QUOTA_ANON_TURNS_PER_DAY` / `QUOTA_ANON_SEARCHES_PER_DAY` (optional, default 10 / 2)
+- [ ] `QUOTA_USER_TURNS_PER_DAY` / `QUOTA_USER_SEARCHES_PER_DAY` (optional, default 50 / 10)
+- [ ] `YOUTUBE_API_KEY` (optional; without it video title/thumbnail are always null)
+- [ ] Any other server keys you've added since (search `process.env.` under `src/`)
 
 After saving env vars, redeploy so the new values bake in: `vercel deploy --prod` or trigger via the dashboard.
 
@@ -45,7 +51,18 @@ Without this step, Google sign-in via `signInWithRedirect` will refuse to return
   firebase use fy-webapp
   firebase deploy --only firestore:rules
   ```
-- [ ] Confirm in console: **Firestore → Rules** should show the `users/{uid}` self-access policy.
+- [ ] Confirm in console: **Firestore → Rules** should show the `users/{uid}` self-access
+      policy, the `chats/{chatId}/messages/{messageId}` subcollection rule, and
+      `usage/{uid}` as read-own / write-never (the server writes it via the Admin SDK).
+
+## 4b. Cost guardrails — do this BEFORE enabling billing
+
+- [ ] `FIREBASE_SERVICE_ACCOUNT` set (above). An unauthenticated `/api/chat`
+      with billing on is an open tap.
+- [ ] Per-user quotas reviewed against what you can afford — see `docs/cost-model.md`
+- [ ] Billing budget alert set well below the tier cap
+- [ ] No idle paid resources left in any project:
+      `gcloud sql instances list --project=<id>`
 
 ## 5. Smoke test on production URL
 
@@ -60,6 +77,8 @@ Run the same matrix you did locally, against the Vercel URL:
 - [ ] Same as above → Confirm — signs into existing account
 - [ ] Language switcher works (fr/mg/en) on `/login`
 - [ ] No `permission-denied` errors in browser console
+- [ ] Send a chat message — reply streams in token by token
+- [ ] `curl -X POST <url>/api/chat -d '{}'` with no auth header → `401`, not a reply
 
 ## 6. Common failure modes
 
@@ -69,7 +88,12 @@ Run the same matrix you did locally, against the Vercel URL:
 | `Firebase: Error (auth/unauthorized-domain)` in console | Same as above |
 | `permission-denied` on Firestore writes | Rules not deployed, or `request.auth` is null (signed out) |
 | `Firebase: Error (auth/api-key-not-valid)` | `NEXT_PUBLIC_FIREBASE_API_KEY` missing or wrong scope on Vercel |
-| `/api/chat` returns 500 | `VERTEX_API_KEY` not set on Vercel; check function logs |
+| `/api/chat` returns 500 | `GEMINI_API_KEY` not set on Vercel; check function logs |
+| `/api/chat` returns 503 `auth_not_configured` | `FIREBASE_SERVICE_ACCOUNT` missing or not valid JSON |
+| `/api/chat` returns 401 for signed-in users | Client not sending the ID token, or token from a different Firebase project |
+| `/api/chat` returns 429 `quota_exceeded` | Working as intended — daily per-user cap reached |
+| Chat answers arrive all at once, not streamed | A proxy is buffering; confirm `X-Accel-Buffering: no` survives |
+| Every model call 404s | Model ID retired — run `npm run models:check` |
 | Build fails on Vercel but succeeds locally | Env var only set for one scope (Production but not Preview, etc.) |
 
 ## 7. Optional follow-ups

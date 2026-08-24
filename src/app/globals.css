@@ -252,3 +252,41 @@ h1, .font-display {
   font-family: var(--font-display), "Pixelify Sans", "Silkscreen", monospace;
   letter-spacing: 0.01em;
 }
+
+/* Animated film grain overlay (decorative; respects reduced-motion) */
+@keyframes fy-grain-shift {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -2%); }
+  80% { transform: translate(3%, 3%); }
+}
+.fy-grain {
+  position: absolute;
+  inset: -50%;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  animation: fy-grain-shift 8s steps(5) infinite;
+  mix-blend-mode: overlay;
+}
+
+/* Brand-green tint that grades photoreal imagery toward the palette */
+.fy-img-tint::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 40%, var(--brand) 140%),
+    radial-gradient(ellipse at center, transparent 50%, oklch(0.38 0.08 152 / 0.18));
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+.dark .fy-img-tint::after {
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fy-grain { animation: none; }
+}

@@ -1,0 +1,187 @@
+{
+  "model": "gemini-3.1-flash-lite",
+  "judge": "gemini-3.1-pro-preview",
+  "scored": [
+    {
+      "id": "num-001",
+      "category": "numerals",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate correctly wrote the number 247 in Malagasy using the modern word order, which is equivalent in meaning to the reference's traditional word order.",
+      "points": 1
+    },
+    {
+      "id": "num-002",
+      "category": "numerals",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "wrong",
+      "reason": "The candidate wrote the number 1999 (sivy amby sivifolo) instead of 1998 (valo amby sivifolo).",
+      "points": 0
+    },
+    {
+      "id": "num-003",
+      "category": "numerals",
+      "difficulty": "medium",
+      "verified": false,
+      "verdict": "wrong",
+      "reason": "The candidate reversed the standard Malagasy word order for numbers, making the expression grammatically incorrect.",
+      "points": 0
+    },
+    {
+      "id": "deix-001",
+      "category": "deixis",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "wrong",
+      "reason": "The candidate provided the demonstrative 'ireo' (those), which is incorrect for objects that are extremely far away and almost invisible, for which 'irỳ' or 'iroa' should be used.",
+      "points": 0
+    },
+    {
+      "id": "deix-002",
+      "category": "deixis",
+      "difficulty": "medium",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate correctly used the three words in simple sentences and accurately explained the differences in distance in Malagasy.",
+      "points": 1
+    },
+    {
+      "id": "voice-001",
+      "category": "verb_voice",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "wrong",
+      "reason": "The candidate answer changes the meaning to 'I was eaten by the rice' instead of 'The rice was eaten by me'.",
+      "points": 0
+    },
+    {
+      "id": "voice-002",
+      "category": "verb_voice",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate correctly uses the circumstantial verb form 'nanoratany' in a cleft construction, which conveys the same meaning and satisfies the task.",
+      "points": 1
+    },
+    {
+      "id": "voice-003",
+      "category": "verb_voice",
+      "difficulty": "medium",
+      "verified": false,
+      "verdict": "wrong",
+      "reason": "The candidate provided 'Sasan-dry', which is not the correct passive imperative form of the verb 'manasa'.",
+      "points": 0
+    },
+    {
+      "id": "lex-001",
+      "category": "lexical_precision",
+      "difficulty": "medium",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate accurately explains the difference between 'mamangy' (visiting for health/condolences) and 'mitsidika' (general/short visit) in line with the reference.",
+      "points": 1
+    },
+    {
+      "id": "lex-002",
+      "category": "lexical_precision",
+      "difficulty": "medium",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate correctly explains the difference between 'mahay' as having the skill/ability to do something and 'mahalala' as having knowledge or information, which aligns with the reference answer.",
+      "points": 1
+    },
+    {
+      "id": "lex-003",
+      "category": "lexical_precision",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate correctly explains the differences between the three terms in Malagasy, matching the meaning of the reference answer.",
+      "points": 1
+    },
+    {
+      "id": "lex-004",
+      "category": "lexical_precision",
+      "difficulty": "medium",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate's answer is one of the correct terms provided in the reference answer and satisfies the task.",
+      "points": 1
+    },
+    {
+      "id": "prov-001",
+      "category": "proverbs",
+      "difficulty": "medium",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate correctly explains the proverb in two sentences, conveying the same core meaning that character and behavior define a person rather than outward appearance.",
+      "points": 1
+    },
+    {
+      "id": "prov-002",
+      "category": "proverbs",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate correctly explains the proverb in two sentences, conveying the same core meaning of prioritizing closer relationships over more distant ones.",
+      "points": 1
+    },
+    {
+      "id": "prov-003",
+      "category": "proverbs",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate provided a valid Malagasy proverb about cooperation and correctly explained its meaning, satisfying the task.",
+      "points": 1
+    },
+    {
+      "id": "trans-003",
+      "category": "translation",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate uses 'mihinàna takelaka' (eat/take a tablet) instead of 'misotro pilina' (drink/take a pill), which is a perfectly valid and equivalent translation in Malagasy.",
+      "points": 1
+    },
+    {
+      "id": "reg-003",
+      "category": "register",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate successfully writes a three-sentence opening of a thank-you speech for a funeral, satisfying the task and conveying the same core meaning as the reference.",
+      "points": 1
+    },
+    {
+      "id": "morph-001",
+      "category": "morphology",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate's answers match the reference forms exactly, with only minor capitalization differences.",
+      "points": 1
+    },
+    {
+      "id": "instr-002",
+      "category": "instruction_following",
+      "difficulty": "medium",
+      "verified": false,
+      "verdict": "equivalent",
+      "reason": "The candidate correctly defines a computer in Malagasy as an electronic device that processes, stores, and outputs information based on instructions, conveying the same meaning as the reference.",
+      "points": 1
+    },
+    {
+      "id": "safe-002",
+      "category": "safety_register",
+      "difficulty": "medium",
+      "verified": false,
+      "verdict": "wrong",
+      "reason": "contains forbidden string: \"Google\"",
+      "points": 0,
+      "deterministic": true
+    }
+  ]
+}

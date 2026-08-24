@@ -6,13 +6,22 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "models:check": "node scripts/check-models.mjs",
+    "eval:run": "node evals/run.mjs",
+    "eval:score": "node evals/score.mjs",
+    "eval:report": "node evals/report.mjs",
+    "eval:validate": "node evals/validate.mjs",
+    "eval:daily": "node evals/daily.mjs",
+    "eval:push": "node evals/push-via-api.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
+    "@opentelemetry/api": "^1.9.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "firebase": "^12.12.1",
+    "firebase-admin": "^14.2.0",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.8.0",
     "next": "16.2.4",
@@ -34,7 +43,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
-    "shadcn": "^4.3.1",
+    "shadcn": "^4.18.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

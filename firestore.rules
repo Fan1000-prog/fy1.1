@@ -7,7 +7,23 @@ service cloud.firestore {
 
       match /chats/{chatId} {
         allow read, write: if request.auth != null && request.auth.uid == uid;
+
+        // Messages moved out of the chat document into a subcollection: a
+        // document is capped at 1 MiB and inline message arrays were on course
+        // to exceed it.
+        match /messages/{messageId} {
+          allow read, write: if request.auth != null && request.auth.uid == uid;
+        }
       }
+    }
+
+    // Daily spend meters, written only by the server via the Admin SDK (which
+    // bypasses these rules). Clients may read their own counters to display
+    // remaining allowance, and may never write them — a client-writable meter
+    // is not a meter.
+    match /usage/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
     }
 
     // IMPORTANT: keep `hasOnly([...])` field list in sync with submitFeedback() in

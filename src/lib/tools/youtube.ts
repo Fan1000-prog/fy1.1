@@ -89,7 +89,7 @@ export async function runYoutubeSummary(
       ? transcriptSegments.value.map((s) => s.text).join(" ").slice(0, 12000)
       : "";
 
-  const detectedLang = detectLanguage(message);
+  const detectedLang = detectLanguage(message, locale);
   const systemPrompt = buildSystemPrompt(locale, detectedLang);
 
   const contextBlock = [
