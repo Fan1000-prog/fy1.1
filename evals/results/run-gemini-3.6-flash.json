@@ -8,6 +8,22 @@
     "num-002": {
       "text": "Valo ambin'ny sivifolo sy tsivin-jato sy arivo",
       "harness": "raw"
+    },
+    "num-003": {
+      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "harness": "raw"
+    },
+    "deix-001": {
+      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "harness": "raw"
+    },
+    "deix-002": {
+      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "harness": "raw"
+    },
+    "voice-001": {
+      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "harness": "raw"
     }
   }
 }

@@ -1,8 +1,9 @@
 {
-  "model": "gemini-3.7-flash",
+  "model": "gemini-3.5-flash",
   "answers": {
     "num-001": {
-      "text": "Fito amby efapolo sy roanjato"
+      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "harness": "raw"
     },
     "num-002": {
       "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
@@ -13,10 +14,6 @@
       "harness": "raw"
     },
     "deix-001": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
-      "harness": "raw"
-    },
-    "deix-002": {
       "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
       "harness": "raw"
     }
