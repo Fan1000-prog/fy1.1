@@ -12,7 +12,8 @@
     "eval:score": "node evals/score.mjs",
     "eval:report": "node evals/report.mjs",
     "eval:validate": "node evals/validate.mjs",
-    "eval:daily": "node evals/daily.mjs"
+    "eval:daily": "node evals/daily.mjs",
+    "eval:push": "node evals/push-via-api.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
