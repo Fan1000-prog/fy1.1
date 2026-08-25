@@ -9,11 +9,11 @@
       "harness": "raw"
     },
     "num-003": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "text": "Dimy amby telopolo",
       "harness": "raw"
     },
     "deix-001": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "error": "http_500: {\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal error encountered.\",\n    \"status\": \"INTERNAL\"\n  }\n}\n",
       "harness": "raw"
     },
     "deix-002": {
@@ -22,6 +22,26 @@
     },
     "voice-001": {
       "text": "Nohaniko ny vary.",
+      "harness": "raw"
+    },
+    "voice-002": {
+      "text": "Nanoratany taratasy ity penina ity.",
+      "harness": "raw"
+    },
+    "voice-003": {
+      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "harness": "raw"
+    },
+    "lex-001": {
+      "text": "Ny **mamangy** dia fandehanana mijery *olona* noho ny fihavanana, aretina, na fahoriana; fa ny **mitsidika** kosa dia fandehanana mijery *toerana* (fizahan-tany, fisafoana) na fandalovana fotsiny.",
+      "harness": "raw"
+    },
+    "lex-002": {
+      "text": "Ny **mahay** dia manondro *fahaiza-manao* na fahaizana manatanteraka zavatra (ohatra: mahay mitondra fiara), fa ny **mahalala** kosa dia manondro *fahalalana*, fananana vaovao, na fahafantarana zavatra/olona iray (ohatra: mahalala ny lalàn'ny fifamoivoizana).",
+      "harness": "raw"
+    },
+    "lex-003": {
+      "text": "Ireto ny fahasamihafan’izy ireo:\n\n* **Vady:** Teny fototra milaza ilay olona mikambana amin’ny tena ara-panambadiana (vady lahy na vady vavy).\n* **Vadiny:** Ny vadin’ny olona iray (misy tovana manondro tompony: \"vady + ny\").\n* **Vadikely:** Vady faharoa, tokantrano maso, na vady tsy ara-dalàna (ankoatra ny vadibe).",
       "harness": "raw"
     }
   }

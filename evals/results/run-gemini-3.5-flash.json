@@ -72,6 +72,78 @@
     "trans-003": {
       "text": "Mihinana pilina iray indroa isan'andro aorian'ny sakafo, ary aza mihoatra ny fatra voatondro.",
       "harness": "raw"
+    },
+    "trans-004": {
+      "text": "Nothing but the truth sets free.",
+      "harness": "raw"
+    },
+    "trans-005": {
+      "text": "Nolavin'ny banky ny fampindramam-bola satria tsy nahomby ny voka-pambolena roa taona nisesy.",
+      "harness": "raw"
+    },
+    "reg-001": {
+      "text": "Tompoko, mangataka fahazoan-dàlana aminao aho mba tsy ho afaka hanatrika ny fivoriana rahampitso noho ny antony tsy azo ihodivirana. Miala tsiny indrindra amin'izany tsy fahafahako izany aho ary hiezaka ny hanaraka ny tatitra rehetra mikasika izany fivoriana izany. Mankasitraka sahady amin'ny fahatakaranao sy ny fankatoavanao izany fangatahana izany, tompoko.",
+      "harness": "raw"
+    },
+    "reg-002": {
+      "text": "Andao hiara-hihinana kely e! Handeha aiza isika?",
+      "harness": "raw"
+    },
+    "reg-003": {
+      "text": "Tompokolahy sy tompokovavy, amin'izao fotoan-tsarotra feno alahelo izao, dia mijoro eto anatrehanareo izahay fianakaviana. Misaotra amin'ny fo feno fankasitrahana anareo rehetra tonga nanotrona sy nizara izao fahoriana izao taminay. Ny fanatrehanareo sy ny fankaherezana natolotrareo no hery lehibe mampahery anay amin'izao fandevenana ny malalanay izao.",
+      "harness": "raw"
+    },
+    "morph-001": {
+      "text": "(a) manasa\n(b) sasana\n(c) fanasana",
+      "harness": "raw"
+    },
+    "morph-002": {
+      "text": "Ho avy: Hividy vary izy.\nLasa: Nividy vary izy.",
+      "harness": "raw"
+    },
+    "morph-003": {
+      "text": "Fanalefahana ny heviny (midika hoe \"somary mafana\").",
+      "harness": "raw"
+    },
+    "fact-001": {
+      "text": "Atsinanana ny anaran'ny faritra misy an'i Toamasina, ary Toamasina ny renivohiny.",
+      "harness": "raw"
+    },
+    "fact-002": {
+      "text": "Ny famadihana dia fomba amam-panao nentin-drazana malagasy izay amoahana ny taolan'ny havana efa nodimandry avy ao am-pasana mba hofonosina lamba landy vaovao. Fotoana lehibe hanehoana ny fanajana ny razana sy hanamafisana ny fihavanana eo amin'ny velona izany, izay arahina fety sy fifaliana.",
+      "harness": "raw"
+    },
+    "fact-003": {
+      "text": "Ny **hira gasy** dia tantara an-kira nentim-paharazana avy any afovoan-tany (Imerina) miompana amin'ny fanabeazana sy ny kabary, mampiasa zavamaneno tsofina sy amponga.\n\nNy **salegy** kosa dia mozika mafana sy mavitrika handihizana avy any amin'ny morontsiraka (indrindra ny avaratra), manana gadona haingana sy mampiasa zavamaneno maoderina (gitara elektrika, akordiona).",
+      "harness": "raw"
+    },
+    "fact-004": {
+      "text": "Ny Ariary no vola ampiasaina eto Madagasikara, ary ny Iraimbilanja no sombin-bola kely kokoa ao aminy.",
+      "harness": "raw"
+    },
+    "instr-001": {
+      "text": "Antananarivo no renivohitr'i Madagasikara, ary misy mponina manodidina ny 1,3 tapitrisa eo ho eo any (na manodidina ny 3 tapitrisa raha ampidirina ny faritra manodidina rehetra).",
+      "harness": "raw"
+    },
+    "instr-002": {
+      "text": "Ny solosaina dia fitaovana mandeha amin'ny herinaratra izay afaka mandray, mitahiry, mikarakara, ary mamoaka karazam-baovao maro samihafa (toy ny soratra, sary, ary feo) amin'ny alalan'ny fanaovana kajy haingana dia haingana.",
+      "harness": "raw"
+    },
+    "instr-003": {
+      "text": "23",
+      "harness": "raw"
+    },
+    "cs-001": {
+      "text": "1. **Merci** (Frantsay) = **Misaotra** (Malagasy)\n2. **Déranger** (Frantsay, ampiasaina matetika amin'ny hoe \"man-dérange\") = **Manelingelina** (Malagasy)\n3. **Goûter** (Frantsay) = **Tsakitsaky** na **Sakafo maivana** (Malagasy)",
+      "harness": "raw"
+    },
+    "cs-002": {
+      "text": "Nanao fivoriana izahay tao amin'ny trano fiasana, avy eo nandeha nividy karatra finday.",
+      "harness": "raw"
+    },
+    "dial-001": {
+      "text": "Ny fahasamihafan'ny fomba fiarahabana eo amin'ny fiteny merina sy ny fiteny betsimisaraka:\n\n*   **Fiteny Merina:** \"Manao ahoana\" ny fiarahabana tsotra, ary \"Ho aiza ianao?\" (na \"Mankaiza?\") rehefa miarahaba olona mandalo sy manontany ny alehany.\n*   **Fiteny Betsimisaraka:** \"Akory\" (na \"Akory lahaly\") ny fiarahabana tsotra, ary \"Ho aia ianao?\" (na \"Mankaia?\") rehefa miarahaba olona mandalo sy manontany ny alehany.",
+      "harness": "raw"
     }
   }
 }

@@ -80,6 +80,78 @@
     "trans-005": {
       "text": "Nandà ny fampindramam-bola ny banky satria tsy nahomby ny voka-pambolena roa taona nifandimby.",
       "harness": "raw"
+    },
+    "reg-001": {
+      "text": "Manolotra ny fahaiza-manaja aminao Tompoko, ary miala tsiny fa mangataka fahazoan-dàlana tsy ho afaka hanatrika ny fivoriana rahampitso aho. Misy antony maika sy tsy azo analavirana voatery karakaraiko amin'io fotoana io. Misaotra indrindra amin'ny fahazoana ny zava-misy, ary vonona hatrany aho handray ny tatitra hivoaka amin'izany.",
+      "harness": "raw"
+    },
+    "reg-002": {
+      "text": "Andao hanoana am'izay e! Handeha hisakafo aiza tsika?",
+      "harness": "raw"
+    },
+    "reg-003": {
+      "text": "Miarahaba antsika rehetra tafangona eto androany ao anatin'izao fotoana mampalhelo noho ny fahalasanan'ny havantsika izao. Maneho ny fankasitrahana feno avy ao am-po izahay mianakavy amin'ny fahatongavanareo rehetra tonga niondrika sy nanotrona anay amin'izao fahoriana izao. Ny teny fampiononana sy ny tohana natolotrareo dia hery lehibe manamaivana ny alahelonay.",
+      "harness": "raw"
+    },
+    "morph-001": {
+      "text": "(a) manasa\n(b) sasana\n(c) fanasana",
+      "harness": "raw"
+    },
+    "morph-002": {
+      "text": "Ho avy: Hividy vary izy.\nLasa: Nividy vary izy.",
+      "harness": "raw"
+    },
+    "morph-003": {
+      "text": "Manambara hafanana mihena na mafana kely (tsy tena mafana tsara) ny hoe \"mafanafana\" raha oharina amin'ny \"mafana\".",
+      "harness": "raw"
+    },
+    "fact-001": {
+      "text": "Ny faritra misy an'i Toamasina dia ny faritra **Atsinanana**, ary i **Toamasina** ihany no renivohitr'io faritra io.",
+      "harness": "raw"
+    },
+    "fact-002": {
+      "text": "Ny famadihana dia fomba amam-panao nentin-drazana malagasy amoahana ny taolambalon'ny havana efa maty avy ao am-pasana mba hofonosina lamba mena vaovao. Izany dia fety ankalazana miaraka amin'ny hira, dihy, ary fiarahan-misakafo mba hanehoana ny fitiavana sy ny fanajana ny razana.",
+      "harness": "raw"
+    },
+    "fact-003": {
+      "text": "Ny **hira gasy** dia kanto nentim-paharazana avy any amin'ny Afovoan-tany (Imerina) mampiaraka hira, dihy, sy kabary amin'ny fitafiana nentim-paharazana. Ny **salegy** indray dia mozika sy dihy haingana ary mavitrika avy any amin'ny Morontsiraka (Avaratra) ampiasana zavamaneno maoderina toy ny gitara elektrika sy akordeo.",
+      "harness": "raw"
+    },
+    "fact-004": {
+      "text": "Ny Ariary no vola ampiasaina eto Madagasikara, ary ny Iraimbilanja no sombin-bola kely kokoa ao aminy.",
+      "harness": "raw"
+    },
+    "instr-001": {
+      "text": "Antananarivo no renivohitr'i Madagasikara, ary misy mponina manodidina ny 1,3 hatramin'ny 3 tapitrisa eo ho eo aminy.",
+      "harness": "raw"
+    },
+    "instr-002": {
+      "text": "Ny solosaina dia fitaovana ampiasaina hikirakirana, hitahirizana, ary hanodinana angon-drakitra sy fampahalalana. Mahay manao kajy maro haingana dia haingana izy ary afaka manatanteraka asa samihafa araka ny toromarika sy fandaharana napetraka ao anatiny. Mampiasa izany ny olona mba hanamora ny fitantanana asa, ny fikarohana, ary ny fifandraisana.",
+      "harness": "raw"
+    },
+    "instr-003": {
+      "text": "23",
+      "harness": "raw"
+    },
+    "cs-001": {
+      "text": "Ity misy ohatra telo amin'ny teny frantsay fampiasa matetika amin'ny resaka andavanandro any Antananarivo sy ny teny malagasy mifanaraka aminy:\n\n1. **Merci** : Misaotra\n2. **D'accord** : Eny / Ekena\n3. **Problème** : Olana",
+      "harness": "raw"
+    },
+    "cs-002": {
+      "text": "Nanao fivoriana izahay tao amin'ny trano fiasana, avy eo nandeha nividy karatra finday.",
+      "harness": "raw"
+    },
+    "dial-001": {
+      "text": "Ireto ny fahasamihafan'ny fomba fiarahabana amin'ny fiteny Merina sy Betsimisaraka:\n\n* **Fiteny Merina:** Mampiasa ny hoe **\"Manahoana\"** na **\"Salama\"** (ary mampiasa ny hoe *\"Aiza\"* na *\"Aiza kaiza\"* amin'ny fiarahabana tsy ara-potoana).\n* **Fiteny Betsimisaraka:** Mampiasa ny hoe **\"Akory\"** na **\"Akory anao\"** (ary mampiasa ny hoe *\"Aia\"* solon'ny *\"Aiza\"* amin'ny fiarahabana na fanontaniana).",
+      "harness": "raw"
+    },
+    "dial-002": {
+      "text": "Ny fiteny (fitenim-paritra) ampiasaina any amin'ny faritra Atsimo-Andrefana (Toliara) dia ny **fiteny Masikoro** (ampiasain'ny Vezo sy ny Bara ary ny Mahafaly koa amin'ny ampahany).\n\nOhatra teny roa manavaka azy amin'ny teny ofisialy:\n\n1. **Soa** (Toliara) = **Tsara** (Teny ofisialy)\n2. **Aia** (Toliara) = **Aiza** (Teny ofisialy)",
+      "harness": "raw"
+    },
+    "slang-001": {
+      "text": "Ny dikan'ny hoe « Sali ahn » dia **« Salama »** na **« Manao ahoana »** (fiarahabana ampiasain'ny tanora). Avy amin'ny teny frantsay hoe **« Salut »** no niaviany.",
+      "harness": "raw"
     }
   }
 }
