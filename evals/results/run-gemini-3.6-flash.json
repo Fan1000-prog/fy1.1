@@ -152,6 +152,62 @@
     "slang-001": {
       "text": "Ny dikan'ny hoe « Sali ahn » dia **« Salama »** na **« Manao ahoana »** (fiarahabana ampiasain'ny tanora). Avy amin'ny teny frantsay hoe **« Salut »** no niaviany.",
       "harness": "raw"
+    },
+    "slang-002": {
+      "text": "Teny fiantsoana na fanehoana fahazazarana sy fihavanana amin'ny namana izany, mitovy dika amin'ny hoe « akama », « namana », na « rangahy ».",
+      "harness": "raw"
+    },
+    "slang-003": {
+      "text": "- **Dikan'izany:** « Tena matotra/marina ve izany? » na « Azo antoka ve izany? »\n- **Valiny mahazatra:** « Eny, tena izany mihitsy! » na « Tena matotra ka! »",
+      "harness": "raw"
+    },
+    "slang-004": {
+      "text": "Ny dikan'ny teny hoe « **kozy** » dia **resaka**, **vaovao**, na **fahamarinana** (fiteny an-dalambe/slang).\n\nOhatra amin'ny fanontaniana fiarahabana an-tanàna:\n**« Manao ahoana ny kozy? »** (na **« Inona ny kozy? »**)",
+      "harness": "raw"
+    },
+    "slang-005": {
+      "text": "What's up, what's the news?",
+      "harness": "raw"
+    },
+    "slang-006": {
+      "text": "Ahoana lah? Ino maresaka?",
+      "harness": "raw"
+    },
+    "slang-007": {
+      "text": "Indro ny dikan'io resaka an-tanàna io amin'ny teny anglisy:\n\n**Person A:** \"Hey! What's up?\" / \"Hi! What's the news?\"\n* (*Sali ahn* = Hi/Hey; *Inona ny kozy?* = What's up? / What's going on?)\n\n**Person B:** \"Dude, are you serious?\" / \"Man, for real?\"\n* (*Letie* = Dude/Man/Bro; *serieux ve zany?* = Are you serious? / Is that for real?)\n\n**Fiantsoana sy teny manodidina (Context):**\nResaka fifanoharana am-parahatsosiana amin'ny tanora izy ity, izay analan'ny olona voalohany vaovao, ary ny olona faharoa ambarany gaga na tsy mino momba ny vaovao na zavatra iray vao reny.",
+      "harness": "raw"
+    },
+    "slang-008": {
+      "text": "Sali bro, tsisy kozy ah! Milay fotsiny. Mba ahoana ny any aminao?",
+      "harness": "raw"
+    },
+    "dp-001": {
+      "text": "Ny feo hoe **« Ki »** dia teny maneho **fahagagana, fahatairana, na tsy fankatoavana**. \n\nAmpiasaina izy rehefa gaga, taitra, na tsy ampoizina ny zavatra iray re na hita.",
+      "harness": "raw"
+    },
+    "dp-002": {
+      "text": "Kianteny milaza zava-dre (vaovao re fotsiny na tenin'olona ampitaina).",
+      "harness": "raw"
+    },
+    "dp-003": {
+      "text": "Ny « **lesy** » dia ampiasaina hiantsoana **lehilahy** (namana na zandry), fa ny « **akia** » kosa dia ampiasaina hiantsoana **vehivavy** (namana na olona akaiky).",
+      "harness": "raw"
+    },
+    "dp-004": {
+      "text": "\"Dude, I heard Koto died.\" / \"Bro, they say Koto died.\"",
+      "harness": "raw"
+    },
+    "dp-005": {
+      "text": "Aiza ka?! Marina e?!",
+      "harness": "raw"
+    },
+    "slang-009": {
+      "text": "Sali e! Tsy misy kozy vao fa milamina daholo. Ianao aza no mitantara?",
+      "harness": "raw"
+    },
+    "dp-006": {
+      "text": "Ny **« ah »** dia maneho fahagagana na fahatakarana zava-vaovao, fa ny **« ahn »** dia midika hoe « eny » (fankatoavana) na ampiasaina hitadiavana fanamarihana (« sa tsy izany? »).",
+      "harness": "raw"
     }
   }
 }

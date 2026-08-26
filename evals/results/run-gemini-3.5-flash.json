@@ -144,6 +144,70 @@
     "dial-001": {
       "text": "Ny fahasamihafan'ny fomba fiarahabana eo amin'ny fiteny merina sy ny fiteny betsimisaraka:\n\n*   **Fiteny Merina:** \"Manao ahoana\" ny fiarahabana tsotra, ary \"Ho aiza ianao?\" (na \"Mankaiza?\") rehefa miarahaba olona mandalo sy manontany ny alehany.\n*   **Fiteny Betsimisaraka:** \"Akory\" (na \"Akory lahaly\") ny fiarahabana tsotra, ary \"Ho aia ianao?\" (na \"Mankaia?\") rehefa miarahaba olona mandalo sy manontany ny alehany.",
       "harness": "raw"
+    },
+    "dial-002": {
+      "text": "Ny fiteny ampiasaina any amin'ny faritra Atsimo-Andrefana (Toliara) dia ny **fiteny Masikoro sy Vezo** (ao anatin'ny rantsan'ny fiteny Sakalava).\n\nOhatra teny roa manavaka azy amin'ny teny ofisialy:\n\n1. **Ampela** (Vehivavy)\n2. **Mizaha** (Mijery)",
+      "harness": "raw"
+    },
+    "slang-001": {
+      "text": "Ny dikan'ny « Sali ahn » dia **« Salama »** na **« Manao ahoana »** (fiarahabana eo amin'ny samy namana na tanora). \n\nAvy amin'ny teny frantsay hoe **« Salut »** io teny io, izay novaina fomba fiteny mba ho lasa teny an-tanàna (argot).",
+      "harness": "raw"
+    },
+    "slang-002": {
+      "text": "\"Namana\", \"ise\", na \"bandy\" (fomba fiantsoana namana akaiky na olona iresahana).",
+      "harness": "raw"
+    },
+    "slang-003": {
+      "text": "**Dikan'ny hoe « Serieux ve zany? »:** \n\"Tena marina ve izany?\" na \"Tena matotra ve izany?\" (fanehoana fahatairana na fisalasalana).\n\n**Valiny mahazatra raha tena matotra ilay raharaha:** \n\"Tena marina izany\" na \"Eny, tena matotra ilay izy.\"",
+      "harness": "raw"
+    },
+    "slang-004": {
+      "text": "Ny dikan'ny teny hoe « kozy » dia: **resaka**, **teny**, na **vaovao**.\n\nFanontaniana fiarahabana an-tanàna mampiasa azy: \n« **Inona ny kozy?** » (midika hoe: *Inona ny vaovao?*)",
+      "harness": "raw"
+    },
+    "slang-005": {
+      "text": "What's the word, what's the news?",
+      "harness": "raw"
+    },
+    "slang-006": {
+      "text": "Inona ny fandeha? Inona ny vaovao any?",
+      "harness": "raw"
+    },
+    "slang-007": {
+      "text": "Here is the English translation and explanation of this informal Malagasy slang conversation:\n\n**Translation:**\n*   **Person A:** \"Hey there! What's up?\" (or \"What's the news?\")\n*   **Person B:** \"Bro, are you serious?\" (or \"Man, is that for real?\")\n\n**Breakdown of the slang terms:**\n*   **Sali ahn!**: A casual greeting derived from the French *\"Salut\"*.\n*   **Inona ny kozy?**: A popular street slang meaning \"What's the news?\", \"What's the talk?\", or \"What's up?\".\n*   **Letie**: A colloquial term used to address a male friend, equivalent to \"bro\", \"dude\", or \"man\".\n*   **Serieux ve zany?**: Means \"Are you serious?\" or \"Is that for real?\" (derived from the French word *\"sérieux\"*).",
+      "harness": "raw"
+    },
+    "slang-008": {
+      "text": "Tsisy kozy fa milamina e! Inona ny vaovao any?",
+      "harness": "raw"
+    },
+    "dp-001": {
+      "text": "Ny feo hoe **« Ki »** dia teny fanehoana **hagagana, fahatairana**, na **fifandraisana akaiky** (fiantsoana namana na vehivavy).\n\nAmpiasaina izy rehefa:\n1. **Gaga na taitra** amin'ny zavatra iray (ohatra: *« Ki! Hay ve izany? »*).\n2. **Miresaka am-pirahalahiana** amin'ny olona akaiky na vehivavy (ohatra: *« Inona izany ki? »*).",
+      "harness": "raw"
+    },
+    "dp-002": {
+      "text": "Kianteny milaza fandrenesana (na fampitana tenin'olona).",
+      "harness": "raw"
+    },
+    "dp-003": {
+      "text": "Ny « **lesy** » dia ampiasaina hiantsoana lehilahy (namana), fa ny « **akia** » kosa dia ampiasaina hiantsoana vehivavy (namana).",
+      "harness": "raw"
+    },
+    "dp-004": {
+      "text": "\"They say Koto is dead, bro.\"",
+      "harness": "raw"
+    },
+    "dp-005": {
+      "text": "Tena ve lesy? Inona no nahazo azy?",
+      "harness": "raw"
+    },
+    "slang-009": {
+      "text": "Sali! Tsisy kozy zany fa milamina e!",
+      "harness": "raw"
+    },
+    "dp-006": {
+      "text": "Ireto ny maha-samy hafa azy ireo:\n\n* **« Ahn »** : ampiasaina hangatahana fankatoavana na hanontaniana (midika hoe: *\"sa tsy izany?\"* na *\"eny?\"*).\n* **« Ah »** : ampiasaina hanehoana fahagagana, fahatairana, na fahatakarana zavatra iray (midika hoe: *\"hay ve!\"* na *\"d'accord\"*).",
+      "harness": "raw"
     }
   }
 }
