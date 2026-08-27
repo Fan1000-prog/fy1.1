@@ -29,7 +29,7 @@
       "harness": "raw"
     },
     "voice-003": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "text": "Sasao",
       "harness": "raw"
     },
     "lex-001": {
@@ -45,11 +45,23 @@
       "harness": "raw"
     },
     "lex-004": {
-      "error": "network: fetch failed",
+      "text": "Ranovola",
       "harness": "raw"
     },
     "prov-001": {
       "text": "Ity ohabolana ity dia manambara fa ny toetra tsara, ny fitondran-tena amam-panahy, ary ny fahendrena no tena mamaritra ny maha-olona ny olona iray fa tsy ny bika aman'endriny na ny harena ananany. Mampianatra antsika izany fa ny hatsaram-panahy sy ny fahaiza-miaina eo amin'ny fiaraha-monina no harena lehibe indrindra mampisy lanjany ny olombelona.",
+      "harness": "raw"
+    },
+    "prov-002": {
+      "text": "Ity ohabolana ity dia maneho ny lanjan'ny fifandraisana tena akaiky sy ny mpiray tampo mivantana mihoatra noho ny havana hafa. Mampianatra izany fa rehefa tojo toe-javatra sarotra dia laharam-pahamehana hatrany ny fiarovana ny tena andry iankinan'ny fianakaviana.",
+      "harness": "raw"
+    },
+    "prov-003": {
+      "text": "**Ohabolana:** \n« Tondro tokana tsy mahazo hao. »\n\n**Dikany:** \nTsy mahavita zavatra firy ny olona iray rehefa miasa irery, fa ny fiaraha-mientana sy ny fanampiana avy amin'ny hafa no mitondra fahombiazana.",
+      "harness": "raw"
+    },
+    "trans-001": {
+      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
       "harness": "raw"
     }
   }

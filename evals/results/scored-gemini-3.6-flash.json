@@ -1,0 +1,42 @@
+{
+  "model": "gemini-3.6-flash",
+  "judge": "gemini-3.1-pro-preview",
+  "scored": [
+    {
+      "id": "num-001",
+      "category": "numerals",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "unjudged",
+      "reason": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "points": 0
+    },
+    {
+      "id": "num-002",
+      "category": "numerals",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "unjudged",
+      "reason": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "points": 0
+    },
+    {
+      "id": "num-003",
+      "category": "numerals",
+      "difficulty": "medium",
+      "verified": false,
+      "verdict": "unjudged",
+      "reason": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "points": 0
+    },
+    {
+      "id": "deix-001",
+      "category": "deixis",
+      "difficulty": "hard",
+      "verified": false,
+      "verdict": "unjudged",
+      "reason": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "points": 0
+    }
+  ]
+}
