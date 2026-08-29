@@ -13,7 +13,7 @@
       "harness": "raw"
     },
     "deix-001": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "text": "Ny mpanoro ampiasaina dia: **Iry**\n\n**Ohatra:**\n« Hitanareo ve **iry** sambokely eny amin'ny faravodilanitra **iry**? »",
       "harness": "raw"
     },
     "deix-002": {
@@ -61,14 +61,22 @@
       "harness": "raw"
     },
     "trans-001": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "text": "Nilalao tany ivelany ny ankizy rehefa nanomboka nilatsaka ny orana, ka nantsoin'ny reniny hiditra ao an-trano izy ireo.",
       "harness": "raw"
     },
     "trans-002": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "text": "Raha fantatro fa ho avy ianao, dia nanomana zavatra hohanina aho.",
       "harness": "raw"
     },
     "trans-003": {
+      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "harness": "raw"
+    },
+    "trans-004": {
+      "text": "Only the truth sets free.",
+      "harness": "raw"
+    },
+    "trans-005": {
       "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
       "harness": "raw"
     }
