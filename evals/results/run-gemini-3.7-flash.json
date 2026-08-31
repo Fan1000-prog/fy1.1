@@ -69,7 +69,7 @@
       "harness": "raw"
     },
     "trans-003": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "text": "Mihinàna takelaka iray indroa isan'andro aorian'ny sakafo, ary aza atao mihoatra ny fatra voatondro.",
       "harness": "raw"
     },
     "trans-004": {
@@ -77,15 +77,39 @@
       "harness": "raw"
     },
     "trans-005": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "text": "Nandà ny fampindramam-bola ny banky satria nandamoka nandritra ny roa taona nisesy ny vokatra.",
       "harness": "raw"
     },
     "reg-001": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "text": "Miarahaba tompoko, miala tsiny indrindra fa tsy ho afaka hanatrika ny fivoriana hotanterahina rahampitso aho noho ny antony tsy azo ialana. Noho izany, mangataka am-panajana ny fahazoan-dàlanao aho mba tsy ho eo amin'izany fotoana izany. Handray an-tanana ny fanaraha-maso ireo fehin-kevitra tapaka aho aorian'ny fotoana, ary misaotra indrindra amin'ny fahatakaranao.",
       "harness": "raw"
     },
     "reg-002": {
       "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "harness": "raw"
+    },
+    "reg-003": {
+      "text": "Tompokolahy sy tompokovavy, amin'izao fotoana mampavesatra ny fonay noho ny fahalasanan'ny havantsika izao, dia manatona anareo am-panetren-tena ny fianakaviana. Misaotra feno anareo rehetra tonga nanotrona sy nizara ity alahelo ity izahay, satria ny fahatongavanareo dia nankahery sy nanamaivana ny fahorianay tokoa. Enga anie Andriamanitra Tompon'ny aina hamerina fitahiana ho anareo tsirairay avy amin'ny fitiavana sy ny fiahiana nasehonareo anay androany.",
+      "harness": "raw"
+    },
+    "morph-001": {
+      "text": "(a) manasa\n(b) sasana\n(c) fanasana",
+      "harness": "raw"
+    },
+    "morph-002": {
+      "text": "Ho avy: Hividy vary izy.\nLasa: Nividy vary izy.",
+      "harness": "raw"
+    },
+    "morph-003": {
+      "text": "Midika hoe **somary mafana** na **tsy dia mafana loatra** izany (manalefaka na mampihena ny herin'ny toetra \"mafana\").",
+      "harness": "raw"
+    },
+    "fact-001": {
+      "text": "Ny anaran'ny faritra misy an'i Toamasina dia ny faritra **Atsinanana**, ary i **Toamasina** ihany no renivohitr'io faritra io.",
+      "harness": "raw"
+    },
+    "fact-002": {
+      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
       "harness": "raw"
     }
   }
