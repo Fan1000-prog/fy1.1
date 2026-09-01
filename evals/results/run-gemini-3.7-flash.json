@@ -109,7 +109,15 @@
       "harness": "raw"
     },
     "fact-002": {
-      "error": "http_429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error,",
+      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "harness": "raw"
+    },
+    "fact-003": {
+      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "harness": "raw"
+    },
+    "fact-004": {
+      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
       "harness": "raw"
     }
   }
