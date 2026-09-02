@@ -109,15 +109,19 @@
       "harness": "raw"
     },
     "fact-002": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "error": "network: fetch failed",
       "harness": "raw"
     },
     "fact-003": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "error": "network: fetch failed",
       "harness": "raw"
     },
     "fact-004": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "text": "Ny vola ampiasaina eto Madagasikara dia ny **Ariary**, ary ny sombin-bola kely kokoa ao aminy dia ny **Iraimbilanja** (1 Ariary = 5 Iraimbilanja).",
+      "harness": "raw"
+    },
+    "instr-001": {
+      "error": "network: fetch failed",
       "harness": "raw"
     }
   }
