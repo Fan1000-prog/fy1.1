@@ -85,7 +85,7 @@
       "harness": "raw"
     },
     "reg-002": {
-      "error": "http_503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later",
+      "text": "Andao hiaraka hisakafo e! Malalaka ve ianao izao?",
       "harness": "raw"
     },
     "reg-003": {
@@ -109,11 +109,11 @@
       "harness": "raw"
     },
     "fact-002": {
-      "error": "network: fetch failed",
+      "text": "Ny famadihana dia fomba amam-panao nentim-paharazana malagasy izay anokafana ny fasan-drazana mba hamoahana ny taolambalon'ireo efa nodimandry sy hamonosana azy ireo amin'ny lamba landy vaovao. Fety sy fotoana lehibe hanomezam-boninahitra ny razana ary hanamafisana ny fihavanana eo amin'ny fianakaviana sy ny mpiara-belona izany lanonana izany.",
       "harness": "raw"
     },
     "fact-003": {
-      "error": "network: fetch failed",
+      "text": "Ny **hira gasy** dia zavakanto nentim-paharazana avy any afovoan-tany, ahitana teatra, kabary, hafatra ara-moraly ary mampiasa zavamaneno tsofina sy amponga. \n\nNy **salegy** kosa dia mozika sy dihy mavitrika mafy gadona avy any amin'ny faritra amorontsiraka (indrindra ny any avaratra), mampiasa akordiona na gitara elektrika natao handihizana.",
       "harness": "raw"
     },
     "fact-004": {
@@ -121,7 +121,47 @@
       "harness": "raw"
     },
     "instr-001": {
-      "error": "network: fetch failed",
+      "text": "Antananarivo no renivohitr'i Madagasikara, ary manodidina ny 1,3 ka hatramin'ny 3 tapitrisa eo ho eo ny isan'ny mponina miaina ao (arakaraka ny fari-tanàna na ny tangoron-tanàna manontolo).",
+      "harness": "raw"
+    },
+    "instr-002": {
+      "text": "Ny **solosaina** dia fitaovana mandeha amin'ny herinaratra izay afaka mandray, mikirakira, mitahiry, ary mamoaka torohay na antontan-kevitra. Izy io dia manatanteraka asa sy kajy maro samihafa amin'ny fomba haingana sy marina, araka ny toromarika omena azy.",
+      "harness": "raw"
+    },
+    "instr-003": {
+      "text": "Misy faritra 23 i Madagasikara.",
+      "harness": "raw"
+    },
+    "cs-001": {
+      "text": "Ireto misy ohatra telo:\n\n1. **Merci** = Misaotra\n2. **Désolé** = Miala tsiny\n3. **Bonjour** = Manao ahoana / Salama",
+      "harness": "raw"
+    },
+    "cs-002": {
+      "text": "Nanao fivoriana tao amin'ny toeram-piasana izahay, avy eo nandeha nividy karatra finday.",
+      "harness": "raw"
+    },
+    "dial-001": {
+      "text": "Ireto ny fahasamihafan’ny fomba fiarahabana eo amin’ny fiteny merina sy ny fiteny betsimisaraka:\n\n* **Fiteny Merina:** Mampiasa indrindra ny teny hoe **\"Manao ahoana\"** na **\"Salama\"** (ohatra: *\"Manao ahoana tompoko\"* na *\"Salama e\"*).\n* **Fiteny Betsimisaraka:** Mampiasa indrindra ny teny hoe **\"Akory\"** (ohatra: *\"Akory aby\"*, *\"Akory anareo\"*) na **\"Mbala tsara\"** / **\"Tsara va\"**.",
+      "harness": "raw"
+    },
+    "dial-002": {
+      "text": "Ny fitenim-paritra ampiasaina any amin'ny faritra Atsimo-Andrefana (Toliara) dia ny **fitenim-paritra Masikoro** sy ny **fitenim-paritra Vezo** (anisan'ny fiteny malagasy tatsimo).\n\nIreto misy ohatra teny roa manavaka azy amin'ny teny ofisialy:\n\n1. **Akory** (na **Karakory**) = *Manao ahoana* na *Ahoana* (teny ofisialy)\n2. **Soa** = *Tsara* na *Salama* (teny ofisialy)",
+      "harness": "raw"
+    },
+    "slang-001": {
+      "text": "Ny dikan'ny hoe **« Sali ahn »** dia fiarahabana am-pirahalahiana (midika hoe *« Salama e! »* na *« Manao ahoana »*). \n\nAvy amin'ny teny frantsay hoe **« Salut »** no niaviany, izay nampifanarahina tamin'ny fomba fiteny an-tanàna malagasy.",
+      "harness": "raw"
+    },
+    "slang-002": {
+      "text": "Teny iantsoana na firesahana amin'ny namana akaiky na akama izy io (mitovy dika amin'ny hoe *« ry lery »*, *« ry baina »*, na *« bro/namako »*). Ampiasaina koa izy io indraindray hanehoana gaga na fanamafisana resaka.",
+      "harness": "raw"
+    },
+    "slang-003": {
+      "text": "- **Diany:** « Tena marina ve izany? » na « Tsy mivazivazy ve ianao? » (fanehoana fisalasalana na fahagagana).\n- **Valiny mahazatra:** « Ie, tena marina mihitsy! » na « Ie, tsy vazivazy mihitsy anie e! »",
+      "harness": "raw"
+    },
+    "slang-004": {
+      "text": "Ny teny hoe **« kozy »** dia fitenin-jatovo na teny an-dalambe midika hoe **« resaka »**, **« teny »**, na **« vaovao »**.\n\n**Ohatra fanontaniana fiarahabana an-tanàna:**\n* « Inona ny kozy e? » (mitovy hevitra amin'ny hoe: *Inona ny vaovao?* na *Manao ahoana?*)",
       "harness": "raw"
     }
   }
