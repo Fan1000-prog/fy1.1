@@ -163,6 +163,50 @@
     "slang-004": {
       "text": "Ny teny hoe **« kozy »** dia fitenin-jatovo na teny an-dalambe midika hoe **« resaka »**, **« teny »**, na **« vaovao »**.\n\n**Ohatra fanontaniana fiarahabana an-tanàna:**\n* « Inona ny kozy e? » (mitovy hevitra amin'ny hoe: *Inona ny vaovao?* na *Manao ahoana?*)",
       "harness": "raw"
+    },
+    "slang-005": {
+      "text": "What's the word, what's the buzz?",
+      "harness": "raw"
+    },
+    "slang-006": {
+      "text": "Ka aiza e? Inona ny fafana?",
+      "harness": "raw"
+    },
+    "slang-007": {
+      "text": "Ity ny dikan'io resaka an-tanàna (slang) io amin'ny teny anglisy:\n\n**Direct translation:**\n— **« Hey! What's up? »** (na *\"What's the news?\"*)\n— **« Bro, are you serious? »** (na *\"Dude, for real?\"*)\n\n---\n\n**Detailed breakdown of the slang:**\n* **« Sali ahn! Inona ny kozy? »** \n  * *Sali:* \"Hi / Hey\" (derived from the French *\"Salut\"*).\n  * *Inona ny kozy:* \"What's up?\" / \"What's the story?\" / \"What's the news?\" (*kozy* is Malagasy street slang for news, talk, or gossip).\n* **« Letie, serieux ve zany? »** \n  * *Letie:* \"Bro / Dude / Man\" (informal way to address a friend/peer).\n  * *Serieux ve zany?:* \"Are you serious?\" / \"Is that for real?\"",
+      "harness": "raw"
+    },
+    "slang-008": {
+      "text": "Sali bro! Tsisy kozy fa milamina daoly e. Any aminao ndray?",
+      "harness": "raw"
+    },
+    "dp-001": {
+      "text": "Ny feo na teny hoe **« Ki »** (na **« Ky »**) dia:\n\n1. **Teny fanehoana fihetseham-po** (fahagagana, fanaintainana, tahotra, na fitalanjonana).\n2. **Teny fiantsoana na firaiketam-po** (fanafohezana ny hoe *« Aky »*), ampiasaina amin'ny firesahana amin'ny olona akaiky (indrindra vehivavy na ankizy).\n\n**Rahoviana no ampiasaina?**\n* Rehefa gaga na tohina tampoka (ohatra: *« Ki! Iza izany? »*).\n* Rehefa miresaka am-pisakaizana na maneho fahalemem-panahy amin'ny havana/namana akaiky (ohatra: *« Fa nahoana moa ki e? »*).",
+      "harness": "raw"
+    },
+    "dp-002": {
+      "text": "Tambinteny milaza tsaho (na fandrenesana/tatitra).",
+      "harness": "raw"
+    },
+    "dp-003": {
+      "text": "Ny **« lesy »** dia ampiasaina hiantsoana **lehilahy** (namana na zandry lahy), fa ny **« akia »** kosa dia ampiasaina hiantsoana **vehivavy** (namana na zandry vavy).",
+      "harness": "raw"
+    },
+    "dp-004": {
+      "text": "\"Bro, they say Koto died, man.\" \n\n*(Na koa: \"Dude, word is Koto died, man.\")*",
+      "harness": "raw"
+    },
+    "dp-005": {
+      "text": "Aza mivazivazy lesy e! Matin'inona hono?",
+      "harness": "raw"
+    },
+    "slang-009": {
+      "text": "Sali! Tsisy kozy ah, milamina foana. Ahoana ny any aminao?",
+      "harness": "raw"
+    },
+    "dp-006": {
+      "text": "Ny maha-samy hafa azy ireo:\n\n* **« Ahn »** : enti-milaza **fanekena na fankatoavana** (mitovy dika amin'ny hoe *« eny »*, *« ie »*, na *« marina izany »*).\n* **« Ah »** : enti-maneho **hagagana na fahatsapana/fahatakarana zavatra** (mitovy dika amin'ny hoe *« hay ve? »*, *« kay »*, na *« azoko »*).",
+      "harness": "raw"
     }
   }
 }
